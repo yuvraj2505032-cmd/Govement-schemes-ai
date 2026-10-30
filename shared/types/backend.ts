@@ -2,7 +2,11 @@
  * Backend Data & API Types for Government Scheme Eligibility Navigator (CTBF-AI-07)
  */
 
-export type LanguageCode = 'en' | 'pa' | 'hi';
+export type LanguageCode = string;
+export type AssistantAppAction =
+  | { type: 'search'; query: string }
+  | { type: 'filter'; category: 'all' | 'Agriculture' | 'Health' | 'Education' | 'Finance' }
+  | { type: 'navigate'; tab: 'dashboard' | 'profile' | 'wizard' | 'saved' | 'insights' | 'family' | 'video-guides' | 'scanner' | 'whatif' | 'districts' | 'deadlines' | 'tracker' };
 export type SocialCategory = 'General' | 'SC' | 'ST' | 'OBC/BC' | 'EWS';
 export type GenderType = 'All' | 'Male' | 'Female' | 'Transgender';
 export type SchemeLevelType = 'Central Government' | 'Punjab State';
@@ -83,6 +87,7 @@ export interface ChatRequestBody {
 
 export interface ChatResponseBody {
   reply: string;
+  action?: AssistantAppAction;
   recommendedSchemeIds: string[];
   isAiGrounded: boolean;
   sources: string[];

@@ -82,7 +82,7 @@ export async function generateGroqText(systemPrompt: string, prompt: string): Pr
     },
     body: JSON.stringify({
       model: env.GROQ_MODEL || 'llama-3.3-70b-versatile',
-      messages: [
+     messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: prompt }
       ],

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CitizenProfile, Language, Occupation, Category, Gender } from '../types/scheme';
 import { TRANSLATIONS } from '../data/translations';
 import { PUNJAB_DISTRICTS } from '../data/punjabDistricts';
@@ -10,6 +10,9 @@ interface ProfileWizardProps {
   onChange: (updatedProfile: CitizenProfile) => void;
   onReset: () => void;
   onApply: () => void;
+  onSaveProfile: () => Promise<void>;
+  onSetPassword: (password: string) => Promise<void>;
+  accountEmail: string | null;
   onOpenAiRoadmap?: () => void;
   eligibleCount: number;
   potentialCount: number;
@@ -21,10 +24,21 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
   onChange,
   onReset,
   onApply,
+  onSaveProfile,
+  onSetPassword,
+  accountEmail,
   onOpenAiRoadmap,
   eligibleCount,
   potentialCount
 }) => {
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isSettingPassword, setIsSettingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const t = TRANSLATIONS[currentLang];
 
   const occupations: Occupation[] = [
@@ -59,6 +73,48 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
     });
   };
 
+  const handleSaveProfile = async () => {
+    setIsSavingProfile(true);
+    setSaveMessage('');
+    setSaveError('');
+    try {
+      if (profile.username.trim().length > 80) {
+        throw new Error('Username must be 80 characters or fewer.');
+      }
+      await onSaveProfile();
+      setSaveMessage('Profile saved. You can reopen it from the profile icon.');
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Could not save your profile.');
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const handleSetPassword = async () => {
+    setPasswordMessage('');
+    setPasswordError('');
+    if (newPassword.length < 8) {
+      setPasswordError('Password must be at least 8 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('The passwords do not match.');
+      return;
+    }
+
+    setIsSettingPassword(true);
+    try {
+      await onSetPassword(newPassword);
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordMessage('Your password has been updated securely.');
+    } catch (error) {
+      setPasswordError(error instanceof Error ? error.message : 'Could not update your password.');
+    } finally {
+      setIsSettingPassword(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 mb-8">
       {/* Wizard Header */}
@@ -88,6 +144,22 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
 
       {/* Grid of Inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-5">
+        <div>
+          <label htmlFor="citizen-username" className="mb-1.5 block text-xs font-semibold text-slate-700">
+            Username
+          </label>
+          <input
+            id="citizen-username"
+            type="text"
+            autoComplete="username"
+            maxLength={80}
+            value={profile.username}
+            onChange={(event) => handleChange('username', event.target.value)}
+            placeholder="Enter your name or username"
+            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          />
+        </div>
+
         {/* Age Input */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
@@ -327,6 +399,62 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
         </div>
       </div>
 
+      <section className="mt-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">Account password</h3>
+            <p className="mt-1 text-xs leading-5 text-slate-600">
+              {accountEmail
+                ? `Set a new password for ${accountEmail}. Supabase Auth manages your password securely.`
+                : 'Sign in to your Supabase account to set or change its password.'}
+            </p>
+          </div>
+        </div>
+        {accountEmail ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <label className="text-xs font-semibold text-slate-700">
+              New password
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+            </label>
+            <label className="text-xs font-semibold text-slate-700">
+              Confirm new password
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => void handleSetPassword()}
+              disabled={isSettingPassword || !newPassword || !confirmPassword}
+              className="min-h-10 justify-self-start rounded-full bg-slate-900 px-4 text-xs font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2"
+            >
+              {isSettingPassword ? 'Updating password…' : 'Set password'}
+            </button>
+            {(passwordMessage || passwordError) && (
+              <p role={passwordError ? 'alert' : 'status'} className={`text-xs sm:col-span-2 ${passwordError ? 'text-red-700' : 'text-emerald-700'}`}>
+                {passwordError || passwordMessage}
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="mt-3 text-xs font-medium text-blue-700">
+            Use the account option in the menu to sign in or create an account with an email and password.
+          </p>
+        )}
+      </section>
+
       {/* Citizen Consent Checkbox (Digital Personal Data Protection Act, 2023 Compliance) */}
       <div className="mt-5 p-3.5 bg-blue-50/70 rounded-xl border border-blue-200/80 flex items-start gap-3">
         <input
@@ -359,6 +487,15 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
         </button>
 
         <div className="flex flex-wrap items-center gap-2 ml-auto">
+          <button
+            type="button"
+            onClick={() => void handleSaveProfile()}
+            disabled={isSavingProfile}
+            className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 disabled:cursor-wait disabled:opacity-60 sm:text-sm"
+          >
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <span>{isSavingProfile ? 'Saving…' : 'Save Profile'}</span>
+          </button>
           {onOpenAiRoadmap && (
             <button
               type="button"
@@ -380,6 +517,11 @@ export const ProfileWizard: React.FC<ProfileWizardProps> = ({
           </button>
         </div>
       </div>
+      {(saveMessage || saveError) && (
+        <p role={saveError ? 'alert' : 'status'} className={`mt-3 text-right text-xs font-medium ${saveError ? 'text-red-700' : 'text-emerald-700'}`}>
+          {saveError || saveMessage}
+        </p>
+      )}
     </div>
   );
 };

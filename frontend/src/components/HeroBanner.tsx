@@ -1,150 +1,119 @@
 import React from 'react';
-import { CitizenProfile, Language } from '../types/scheme';
-import { TRANSLATIONS } from '../data/translations';
-import { Sparkles, CheckCircle2, Users, Calculator, ArrowRight, ShieldCheck } from 'lucide-react';
-import { SmartEligibilitySearchBar } from './SmartEligibilitySearchBar';
+import { ArrowRight, Search, Sparkles, Users, X } from 'lucide-react';
 
 interface HeroBannerProps {
-  currentLang: Language;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onStartWizard: () => void;
   onOpenFamilyFinder: () => void;
   activeFilter: string;
   onFilterChange: (filter: string) => void;
-  totalSchemesCount: number;
-  savedCount?: number;
-  profile: CitizenProfile;
-  onProfileChange: (updatedProfile: CitizenProfile) => void;
-  onlyEligibleFilter: boolean;
-  onToggleOnlyEligible: (val: boolean) => void;
-  eligibleCount: number;
+  onAskAI: () => void;
 }
 
+const filters = ['All', 'Agriculture', 'Health', 'Education', 'Finance'];
+
 export const HeroBanner: React.FC<HeroBannerProps> = ({
-  currentLang,
   searchQuery,
   onSearchChange,
   onStartWizard,
   onOpenFamilyFinder,
   activeFilter,
   onFilterChange,
-  totalSchemesCount,
-  savedCount = 0,
-  profile,
-  onProfileChange,
-  onlyEligibleFilter,
-  onToggleOnlyEligible,
-  eligibleCount,
-}) => {
-  const t = TRANSLATIONS[currentLang];
-
-  const filterTags = [
-    { id: 'all', label: t.allSchemes },
-    { id: 'Saved', label: `${t.filterSaved}${savedCount > 0 ? ` (${savedCount})` : ''}` },
-    { id: 'Farmers', label: t.filterFarmers },
-    { id: 'Students', label: t.filterStudents },
-    { id: 'Women', label: t.filterWomen },
-    { id: 'Senior Citizens', label: t.filterSenior },
-    { id: 'BPL', label: t.filterBPL },
-    { id: 'Health', label: t.filterHealth },
-    { id: 'Loans', label: t.filterLoans },
-  ];
-
-  return (
-    <div className="bg-gradient-to-b from-blue-50/70 via-teal-50/30 to-white pt-6 pb-4 border-b border-slate-200/60">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Main Hero Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6">
-          <div className="inline-flex items-center gap-2 bg-blue-100/90 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200 shadow-xs mb-3">
-            <ShieldCheck className="w-4 h-4 text-teal-600" />
-            <span>Official E-Governance &amp; Citizen Navigator • Punjab</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            {t.appTitle}
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-            {t.tagline}
+  onAskAI,
+}) => (
+  <section className="bg-white px-4 pb-8 pt-5 sm:px-6 sm:pb-12 sm:pt-8">
+    <div className="mx-auto max-w-7xl">
+      <div className="relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-[linear-gradient(115deg,rgba(255,153,51,0.12)_0%,rgba(255,255,255,0.97)_47%,rgba(19,136,8,0.09)_100%)] px-5 py-12 text-center shadow-[0_24px_70px_-48px_rgba(15,23,42,0.34)] sm:px-10 sm:py-16 lg:py-20">
+        <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-orange-200/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-28 -right-16 h-72 w-72 rounded-full bg-emerald-200/25 blur-3xl" />
+        <div className="relative mx-auto max-w-5xl">
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-slate-500 sm:text-sm">
+            E-Governance · Independent India
           </p>
-
-          {/* Key Stat Badges */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mt-5">
-            <div className="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs text-center">
-              <div className="text-base sm:text-lg font-black text-blue-700">{totalSchemesCount} Verified</div>
-              <div className="text-[11px] text-slate-500 font-medium">Central &amp; Punjab Schemes</div>
-            </div>
-            <div className="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs text-center">
-              <div className="text-base sm:text-lg font-black text-teal-700">23 Districts</div>
-              <div className="text-[11px] text-slate-500 font-medium">Sewa Kendras Directory</div>
-            </div>
-            <div className="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs text-center">
-              <div className="text-base sm:text-lg font-black text-emerald-700">₹5,00,000</div>
-              <div className="text-[11px] text-slate-500 font-medium">Max Annual Cashless Health</div>
-            </div>
-            <div className="bg-white/90 p-2.5 rounded-xl border border-slate-200/80 shadow-xs text-center">
-              <div className="text-base sm:text-lg font-black text-indigo-700">100% Free</div>
-              <div className="text-[11px] text-slate-500 font-medium">Zero Broker Fees / Direct DBT</div>
-            </div>
-          </div>
-
-          {/* Quick Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+          <h1 className="text-4xl font-bold leading-[1.08] tracking-[-0.045em] text-slate-950 sm:text-5xl">
+            For an Independent India, Every Citizen Empowered - Empowering Independent India
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+            Discover, check eligibility and apply for 27+ govt schemes in 30 seconds.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <button
               type="button"
               onClick={onStartWizard}
-              className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md shadow-blue-600/20 active:scale-95 transition-all"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-700 px-6 text-sm font-semibold text-white shadow-lg shadow-blue-900/15 transition hover:-translate-y-0.5 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-              <span>{t.wizardTitle}</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
+              Check Eligibility
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </button>
-
             <button
               type="button"
               onClick={onOpenFamilyFinder}
-              className="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-semibold text-sm px-4 py-2.5 rounded-xl shadow-xs active:scale-95 transition-all"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/90 px-6 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white focus:outline-none focus:ring-4 focus:ring-slate-200"
             >
-              <Users className="w-4 h-4 text-indigo-600" />
-              <span>{t.familyTitle}</span>
+              <Users className="h-4 w-4 text-slate-600" aria-hidden="true" />
+              Family Benefit Finder
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Smart Integrated Search Bar with all Eligibility controls inside */}
-        <SmartEligibilitySearchBar
-          currentLang={currentLang}
-          searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
-          profile={profile}
-          onProfileChange={onProfileChange}
-          onlyEligibleFilter={onlyEligibleFilter}
-          onToggleOnlyEligible={onToggleOnlyEligible}
-          eligibleCount={eligibleCount}
-          totalCount={totalSchemesCount}
-        />
+      <div className="mx-auto mt-8 max-w-4xl">
+        <div className="flex h-[60px] items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 shadow-[0_12px_36px_-26px_rgba(15,23,42,0.35)] transition focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100 sm:px-5">
+          <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
+          <label className="sr-only" htmlFor="scheme-search">Search government schemes</label>
+          <input
+            id="scheme-search"
+            type="search"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && searchQuery.trim()) onAskAI();
+            }}
+            placeholder="Search in Punjabi, हिंदी or English — name, benefit, or question..."
+            className="h-full min-w-0 flex-1 bg-transparent text-base text-slate-900 outline-none placeholder:text-slate-400 sm:text-[17px]"
+          />
+          {searchQuery && (
+            <button type="button" onClick={() => onSearchChange('')} aria-label="Clear scheme search" className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
+          <button
+            type="button"
+            disabled={!searchQuery.trim()}
+            onClick={onAskAI}
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-blue-700 px-3 text-xs font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-45 sm:px-4 sm:text-sm"
+          >
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
+            <span>Ask AI</span>
+          </button>
+        </div>
+        <p className="mt-2 text-center text-xs text-slate-500">
+          Search schemes instantly, or ask Janshayak AI to explain your results.
+        </p>
 
-        {/* Category Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center">
-          {filterTags.map((tag) => {
-            const isSelected = activeFilter === tag.id;
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2" aria-label="Filter schemes by category">
+          {filters.map((filter) => {
+            const value = filter === 'All' ? 'all' : filter;
+            const selected = activeFilter === value;
             return (
               <button
-                key={tag.id}
+                key={filter}
                 type="button"
-                onClick={() => onFilterChange(tag.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
-                  isSelected
-                    ? 'bg-blue-700 text-white shadow-xs font-semibold'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                onClick={() => onFilterChange(value)}
+                aria-pressed={selected}
+                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  selected
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
-                {tag.label}
+                {filter}
               </button>
             );
           })}
         </div>
       </div>
     </div>
-  );
-};
+  </section>
+);

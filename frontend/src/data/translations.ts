@@ -2,7 +2,7 @@ import { Language } from '../types/scheme';
 
 export const TRANSLATIONS: Record<Language, Record<string, string>> = {
   en: {
-    appTitle: 'Punjab Scheme Navigator AI',
+    appTitle: 'Janshayak AI',
     appSubtitle: 'Government Scheme Eligibility Navigator (CTBF-AI-07) for Punjab & Central Schemes',
     tagline: 'Discover, check eligibility, assemble documents, and apply for 24+ government welfare schemes.',
     punjabGovt: 'Government of Punjab',
@@ -25,6 +25,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     tabFraudShield: 'Cyber Fraud Shield',
     tabSaved: 'Saved Schemes',
     tabChatbot: 'AI Assistant',
+    tabProfile: 'My Profile',
+    tabAdmin: 'Admin Console',
 
     // Hero stats
     statSchemes: '24+ Verified Schemes',
@@ -120,7 +122,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     speechNotSupported: 'Speech recognition is not supported in this browser. Please type your message.'
   },
   pa: {
-    appTitle: 'ਪੰਜਾਬ ਸਕੀਮ ਨੈਵੀਗੇਟਰ ਏ.ਆਈ',
+    appTitle: 'Janshayak AI',
     appSubtitle: 'ਸਰਕਾਰੀ ਸਕੀਮ ਯੋਗਤਾ ਨੈਵੀਗੇਟਰ (CTBF-AI-07) - ਪੰਜਾਬ ਅਤੇ ਕੇਂਦਰ ਸਰਕਾਰ ਦੀਆਂ ਸਕੀਮਾਂ',
     tagline: '24+ ਸਰਕਾਰੀ ਭਲਾਈ ਸਕੀਮਾਂ ਦੀ ਯੋਗਤਾ ਜਾਣੋ, ਦਸਤਾਵੇਜ਼ ਚੈੱਕ ਕਰੋ ਅਤੇ ਆਨਲਾਈਨ ਅਪਲਾਈ ਕਰੋ।',
     punjabGovt: 'ਪੰਜਾਬ ਸਰਕਾਰ',
@@ -143,6 +145,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     tabFraudShield: 'ਸਾਈਬਰ ਧੋਖਾਧੜੀ ਸੁਰੱਖਿਆ',
     tabSaved: 'ਸੰਭਾਲੀਆਂ ਸਕੀਮਾਂ',
     tabChatbot: 'ਏ.ਆਈ ਸਹਾਇਕ',
+    tabProfile: 'ਮੇਰੀ ਪ੍ਰੋਫ਼ਾਈਲ',
+    tabAdmin: 'ਐਡਮਿਨ ਕੰਸੋਲ',
 
     // Hero stats
     statSchemes: '24+ ਪ੍ਰਮਾਣਿਤ ਸਕੀਮਾਂ',
@@ -238,7 +242,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     speechNotSupported: 'ਇਸ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਬੋਲਣ ਵਾਲੀ ਸਹੂਲਤ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਲਿਖ ਕੇ ਪੁੱਛੋ।'
   },
   hi: {
-    appTitle: 'पंजाब योजना नेविगेटर एआई',
+    appTitle: 'Janshayak AI',
     appSubtitle: 'सरकारी योजना पात्रता नेविगेटर (CTBF-AI-07) - पंजाब व केंद्र सरकार की योजनाएं',
     tagline: '24+ सरकारी कल्याणकारी योजनाओं की पात्रता जांचें, दस्तावेज तैयार करें और आवेदन करें।',
     punjabGovt: 'पंजाब सरकार',
@@ -261,6 +265,8 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     tabFraudShield: 'साइबर सुरक्षा व अलर्ट',
     tabSaved: 'सहेजी गई योजनाएं',
     tabChatbot: 'एआई सहायक',
+    tabProfile: 'मेरी प्रोफ़ाइल',
+    tabAdmin: 'एडमिन कंसोल',
 
     // Hero stats
     statSchemes: '24+ सत्यापित योजनाएं',

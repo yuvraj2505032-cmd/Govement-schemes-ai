@@ -6,6 +6,7 @@ import { GOV_SCHEMES } from '../data/schemes';
 
 test('schemeEngine: PM-Kisan eligibility for small landholding farmer', () => {
   const farmerProfile: CitizenProfile = {
+    username: '',
     age: 42,
     gender: 'Male',
     occupation: 'Farmer',
@@ -30,6 +31,7 @@ test('schemeEngine: PM-Kisan eligibility for small landholding farmer', () => {
 
 test('schemeEngine: Post Matric SC Scholarship requires SC category and Student occupation', () => {
   const scStudent: CitizenProfile = {
+    username: '',
     age: 20,
     gender: 'Female',
     occupation: 'Student',
@@ -58,6 +60,7 @@ test('schemeEngine: Post Matric SC Scholarship requires SC category and Student 
 
 test('schemeEngine: Old Age Pension checks minAge and income ceiling', () => {
   const seniorCitizen: CitizenProfile = {
+    username: '',
     age: 68,
     gender: 'Male',
     occupation: 'Senior Citizen',
@@ -83,6 +86,7 @@ test('schemeEngine: Old Age Pension checks minAge and income ceiling', () => {
 
 test('schemeEngine: What-If simulation detects gained and lost schemes', () => {
   const lowIncomeProfile: CitizenProfile = {
+    username: '',
     age: 25,
     gender: 'Female',
     occupation: 'Unemployed Youth',
@@ -103,6 +107,7 @@ test('schemeEngine: What-If simulation detects gained and lost schemes', () => {
 
 test('schemeEngine: Missing documents aggregator computes readiness percentage', () => {
   const profile: CitizenProfile = {
+    username: '',
     age: 30,
     gender: 'Male',
     occupation: 'Farmer',

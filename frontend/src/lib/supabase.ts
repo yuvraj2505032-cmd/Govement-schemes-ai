@@ -11,19 +11,58 @@ export interface Database {
           user_id: string;
           saved_scheme_ids: string[];
           tracked_items: Json;
+          profile: Json | null;
           updated_at: string;
         };
         Insert: {
           user_id: string;
           saved_scheme_ids?: string[];
           tracked_items?: Json;
+          profile?: Json | null;
           updated_at?: string;
         };
         Update: {
           user_id?: string;
           saved_scheme_ids?: string[];
           tracked_items?: Json;
+          profile?: Json | null;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      app_admins: {
+        Row: { user_id: string };
+        Insert: { user_id: string };
+        Update: { user_id?: string };
+        Relationships: [];
+      };
+      managed_official_sites: {
+        Row: {
+          id: string;
+          title: string;
+          url: string;
+          description: string;
+          category: string;
+          created_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          url: string;
+          description: string;
+          category: string;
+          created_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          url?: string;
+          description?: string;
+          category?: string;
+          created_by?: string;
+          created_at?: string;
         };
         Relationships: [];
       };

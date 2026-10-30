@@ -83,6 +83,7 @@ export interface Scheme {
 }
 
 export interface CitizenProfile {
+  username: string;
   age: number;
   gender: Gender;
   occupation: Occupation;
@@ -94,6 +95,15 @@ export interface CitizenProfile {
   hasDisability: boolean;
   isWidowOrDestitute: boolean;
   isEnrolledInSchoolOrCollege: boolean;
+}
+
+export interface ManagedOfficialSite {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+  category: string;
+  createdAt: string;
 }
 
 export interface EligibilityEvaluation {

@@ -1,0 +1,40 @@
+<svg viewBox="120 50 260 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="saffron" x1="120" y1="60" x2="280" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF9E2C" />
+      <stop offset="1" stop-color="#E85D04" />
+    </linearGradient>
+    <linearGradient id="green" x1="180" y1="210" x2="320" y2="350" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00A86B" />
+      <stop offset=".5" stop-color="#057A55" />
+      <stop offset="1" stop-color="#0E4E38" />
+    </linearGradient>
+    <linearGradient id="check" x1="150" y1="260" x2="360" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981" />
+      <stop offset=".45" stop-color="#F3F4F6" />
+      <stop offset=".7" stop-color="#FB923C" />
+      <stop offset="1" stop-color="#EA580C" />
+    </linearGradient>
+    <filter id="shadow" x="110" y="40" width="280" height="340" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#0F172A" flood-opacity=".14" />
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M250 60c-65 0-115 50-115 118 0 42 25 80 55 107l60-80c-20-10-35-35-35-60 0-35 25-60 60-60s60 25 60 60c0 15-5 30-15 43l45 22v-32C365 110 315 60 250 60Z" fill="url(#saffron)" />
+    <path d="M190 285c22 23 48 50 60 63 12-13 55-60 85-108l-40-25c-20 30-40 57-45 65-8-10-30-32-42-45l-18 50Z" fill="url(#green)" />
+    <g stroke="#fff" stroke-width="2" opacity=".7">
+      <path d="m160 180 30-50 60-40 35 75" />
+      <path d="m190 130 35 35" />
+    </g>
+    <circle cx="160" cy="180" r="4.5" fill="#fff" />
+    <circle cx="190" cy="130" r="5" fill="#fff" />
+    <circle cx="250" cy="90" r="4" fill="#fff" />
+    <circle cx="252" cy="145" r="14" fill="#0D9488" />
+    <path d="M233 186c0-14 9-21 19-21s19 7 19 21h-38Z" fill="#0D9488" />
+    <path d="m252 120 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="#FF9E2C" />
+    <path d="m185 245 50 50q8 7 17-3l103-132c7-8 3-20-7-20h-18l-88 115-37-35c-9-8-23 5-20 25Z" fill="url(#check)" />
+    <circle cx="270" cy="305" r="3.5" fill="#A7F3D0" />
+    <circle cx="295" cy="270" r="4.5" fill="#A7F3D0" />
+    <path d="m270 305 25-35" stroke="#A7F3D0" stroke-width="1.5" opacity=".7" />
+  </g>
+</svg>

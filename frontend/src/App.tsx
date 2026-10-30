@@ -5,11 +5,13 @@ import {
   CitizenProfile, 
   Scheme, 
   ApplicationTrackerItem, 
-  EligibilityEvaluation 
+  EligibilityEvaluation,
+  ManagedOfficialSite
 } from './types/scheme';
 import { GOV_SCHEMES } from './data/schemes';
 import { TRANSLATIONS } from './data/translations';
 import { evaluateAllSchemes } from './utils/schemeEngine';
+import { matchesSchemeSearch } from './utils/schemeSearch';
 
 // Components
 import { Navbar } from './components/Navbar';
@@ -32,33 +34,22 @@ import { DashboardInsights } from './components/DashboardInsights';
 import { ViewAllDocumentsModal } from './components/ViewAllDocumentsModal';
 import { AiSchemeAdvisorModal } from './components/AiSchemeAdvisorModal';
 import { AiProfileRoadmapModal } from './components/AiProfileRoadmapModal';
+import { AdminConsole } from './components/AdminConsole';
 import { supabase, supabaseConfigurationError } from './lib/supabase';
-import { loadCitizenCloudData, parseSavedSchemeIds, parseTrackedItems, saveCitizenCloudData } from './lib/citizenCloudSync';
+import { loadCitizenCloudData, parseCitizenProfile, parseSavedSchemeIds, parseTrackedItems, saveCitizenCloudData } from './lib/citizenCloudSync';
 
 import { 
-  Sparkles, 
-  CheckCircle, 
-  AlertCircle, 
-  Building2, 
-  Users, 
-  HelpCircle, 
-  PhoneCall, 
-  ExternalLink, 
   ShieldCheck,
   SearchX,
   Bookmark,
-  BookmarkCheck,
   Trash2,
-  Youtube,
-  Scan,
-  Clock,
-  ShieldAlert,
-  Calendar,
-  PieChart as PieIcon,
-  Bot
+  Mic,
+  ExternalLink,
+  ArrowLeft
 } from 'lucide-react';
 
 const DEFAULT_PROFILE: CitizenProfile = {
+  username: '',
   age: 38,
   gender: 'Male',
   occupation: 'Farmer',
@@ -72,14 +63,34 @@ const DEFAULT_PROFILE: CitizenProfile = {
   isEnrolledInSchoolOrCollege: false
 };
 
+function getPreferredLanguage(): Language {
+  try {
+    const savedLanguage = localStorage.getItem('janshayak_language');
+    return savedLanguage === 'pa' || savedLanguage === 'hi' ? savedLanguage : 'en';
+  } catch (error) {
+    console.warn('Could not restore the preferred language:', error);
+    return 'en';
+  }
+}
+
+function loadStoredProfile(key: string): CitizenProfile | null {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? parseCitizenProfile(JSON.parse(stored)) : null;
+  } catch (error) {
+    console.warn(`Could not restore profile from ${key}:`, error);
+    return null;
+  }
+}
+
 export default function App() {
-  const [currentLang, setCurrentLang] = useState<Language>('en');
+  const [currentLang, setCurrentLang] = useState<Language>(getPreferredLanguage);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('all');
-  const [onlyEligibleFilter, setOnlyEligibleFilter] = useState(false);
 
-  const [profile, setProfile] = useState<CitizenProfile>(DEFAULT_PROFILE);
+  const [profile, setProfile] = useState<CitizenProfile>(() => loadStoredProfile('janshayak_profile') ?? DEFAULT_PROFILE);
+  const [managedSites, setManagedSites] = useState<ManagedOfficialSite[]>([]);
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [dataOwnerId, setDataOwnerId] = useState<string | null | undefined>(undefined);
@@ -88,13 +99,52 @@ export default function App() {
   const hadActiveCloudAccount = useRef(false);
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState(false);
+  const [assistantInitialQuestion, setAssistantInitialQuestion] = useState('');
+  const hasWelcomedOnLoad = useRef(false);
+
+  const handleLanguageChange = (language: Language) => {
+    setCurrentLang(language);
+    try {
+      localStorage.setItem('janshayak_language', language);
+    } catch (error) {
+      console.warn('Could not save the preferred language:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (hasWelcomedOnLoad.current || !('speechSynthesis' in window)) return;
+    const greetings: Record<Language, { text: string; locale: string }> = {
+      en: { text: 'Hello! Welcome to Jansahayak AI. How can I help you today?', locale: 'en-IN' },
+      pa: { text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! ਜਨਸਹਾਇਕ AI ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ। ਅੱਜ ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?', locale: 'pa-IN' },
+      hi: { text: 'नमस्ते! जनसहायक AI में आपका स्वागत है। आज मैं आपकी कैसे मदद कर सकता हूँ?', locale: 'hi-IN' }
+    };
+
+    const timeout = window.setTimeout(() => {
+      if (hasWelcomedOnLoad.current) return;
+      hasWelcomedOnLoad.current = true;
+
+      const greeting = greetings[currentLang];
+      const utterance = new SpeechSynthesisUtterance(greeting.text);
+      utterance.lang = greeting.locale;
+      utterance.rate = 0.95;
+
+      const voices = window.speechSynthesis.getVoices();
+      const languagePrefix = greeting.locale.split('-')[0].toLowerCase();
+      const voice = voices.find(candidate => candidate.lang.toLowerCase() === greeting.locale.toLowerCase())
+        ?? voices.find(candidate => candidate.lang.toLowerCase().startsWith(`${languagePrefix}-`));
+      if (voice) utterance.voice = voice;
+
+      window.speechSynthesis.speak(utterance);
+    }, 500);
+
+    return () => window.clearTimeout(timeout);
+  }, [currentLang]);
 
   // Modal states for new innovative features
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [scannerTargetScheme, setScannerTargetScheme] = useState<Scheme | null>(null);
   const [isFraudModalOpen, setIsFraudModalOpen] = useState(false);
   const [videoTutorialSchemeId, setVideoTutorialSchemeId] = useState<string>('pm-kisan');
-  const [showDashboardInsights, setShowDashboardInsights] = useState(true);
   const [selectedSchemeModalTab, setSelectedSchemeModalTab] = useState<'overview' | 'eligibility' | 'documents' | 'steps' | 'tutorial'>('overview');
   const [schemeForDocumentsModal, setSchemeForDocumentsModal] = useState<Scheme | null>(null);
   const [aiAdvisorScheme, setAiAdvisorScheme] = useState<Scheme | null>(null);
@@ -190,6 +240,7 @@ export default function App() {
         setSavedSchemeIds(new Set(['pm-kisan', 'sarbat-sehat-bima']));
         setTrackedItems([]);
       }
+      setProfile(loadStoredProfile('janshayak_profile') ?? DEFAULT_PROFILE);
       hadActiveCloudAccount.current = false;
       try {
         const savedSchemes = localStorage.getItem('punjab_saved_schemes');
@@ -209,12 +260,18 @@ export default function App() {
     let active = true;
     hadActiveCloudAccount.current = true;
     setDataOwnerId(undefined);
+    setProfile(DEFAULT_PROFILE);
     setSavedSchemeIds(new Set());
     setTrackedItems([]);
     setCloudSyncStatus('Loading your account data…');
 
-    loadCitizenCloudData(authUser.id).then(({ savedSchemeIds: cloudSaved, trackedItems: cloudTracked, hasCloudRecord }) => {
+    loadCitizenCloudData(authUser.id).then(({ savedSchemeIds: cloudSaved, trackedItems: cloudTracked, profile: cloudProfile, hasCloudRecord }) => {
       if (!active) return;
+      const cachedProfile = loadStoredProfile(`janshayak_profile:${authUser.id}`);
+      const importedProfile = !hasCloudRecord && importLocalDataOnSignIn.current
+        ? loadStoredProfile('janshayak_profile')
+        : null;
+      setProfile(cloudProfile ?? importedProfile ?? cachedProfile ?? DEFAULT_PROFILE);
       if (!hasCloudRecord && importLocalDataOnSignIn.current) {
         const localSaved = localStorage.getItem('punjab_saved_schemes');
         const localTracked = localStorage.getItem('punjab_tracked_schemes');
@@ -265,7 +322,7 @@ export default function App() {
     if (!authUser || !supabase) return;
     setCloudSyncStatus('Syncing changes…');
     const timeout = window.setTimeout(() => {
-      saveCitizenCloudData(authUser.id, savedSchemeIds, trackedItems).then(() => {
+      saveCitizenCloudData(authUser.id, savedSchemeIds, trackedItems, profile).then(() => {
         setCloudSyncStatus('Cloud data is up to date.');
       }).catch((error: unknown) => {
         console.error('Could not sync Supabase app data:', error);
@@ -274,7 +331,48 @@ export default function App() {
     }, 500);
 
     return () => window.clearTimeout(timeout);
-  }, [authReady, dataOwnerId, authUser?.id, savedSchemeIds, trackedItems]);
+  }, [authReady, dataOwnerId, authUser?.id, savedSchemeIds, trackedItems, profile]);
+
+  useEffect(() => {
+    const ownerId = authUser?.id ?? null;
+    if (!authReady || dataOwnerId !== ownerId) return;
+    try {
+      localStorage.setItem(ownerId ? `janshayak_profile:${ownerId}` : 'janshayak_profile', JSON.stringify(profile));
+    } catch (error) {
+      console.error('Could not cache citizen profile on this device:', error);
+      setCloudSyncStatus('Could not save your profile on this device.');
+    }
+  }, [authReady, dataOwnerId, authUser?.id, profile]);
+
+  useEffect(() => {
+    if (!supabase) {
+      setManagedSites([]);
+      return;
+    }
+    let active = true;
+    supabase
+      .from('managed_official_sites')
+      .select('id, title, url, description, category, created_at')
+      .order('created_at', { ascending: false })
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) {
+          console.error('Could not load admin-added official scheme sites:', error);
+          return;
+        }
+        setManagedSites((data ?? []).map(site => ({
+          id: site.id,
+          title: site.title,
+          url: site.url,
+          description: site.description,
+          category: site.category,
+          createdAt: site.created_at
+        })));
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleSignIn = async (email: string, password: string, importLocalData: boolean) => {
     if (!supabase) return { error: supabaseConfigurationError || 'Supabase is not configured.' };
@@ -298,6 +396,52 @@ export default function App() {
     if (!supabase) return supabaseConfigurationError || 'Supabase is not configured.';
     const { error } = await supabase.auth.signOut();
     return error?.message ?? null;
+  };
+
+  const handleSaveProfile = async () => {
+    const ownerId = authUser?.id ?? null;
+    if (!authReady || dataOwnerId !== ownerId) {
+      throw new Error('Your account data is still loading. Please try again in a moment.');
+    }
+
+    const profileKey = ownerId ? `janshayak_profile:${ownerId}` : 'janshayak_profile';
+    try {
+      localStorage.setItem(profileKey, JSON.stringify(profile));
+    } catch (error) {
+      console.error('Could not save citizen profile on this device:', error);
+      throw new Error('Could not save the profile on this device. Check available storage and try again.');
+    }
+
+    if (authUser) {
+      if (!supabase) throw new Error(supabaseConfigurationError || 'Supabase is not configured.');
+      setCloudSyncStatus('Saving your profile to Supabase…');
+      try {
+        const { error: metadataError } = await supabase.auth.updateUser({
+          data: { username: profile.username.trim() }
+        });
+        if (metadataError) throw metadataError;
+        await saveCitizenCloudData(authUser.id, savedSchemeIds, trackedItems, profile);
+      } catch (error) {
+        console.error('Could not save citizen profile to Supabase:', error);
+        setCloudSyncStatus(error instanceof Error ? error.message : 'Could not save profile to Supabase.');
+        throw new Error('The profile is saved on this device, but cloud sync failed. Check your connection and Supabase setup.');
+      }
+      setCloudSyncStatus('Your profile is saved and synced to Supabase.');
+      return;
+    }
+
+    setCloudSyncStatus('Your profile is saved on this device. Sign in to sync it with Supabase.');
+  };
+
+  const handleSetPassword = async (password: string) => {
+    if (!authUser || !supabase) {
+      throw new Error('Sign in to your account before setting a password.');
+    }
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) {
+      console.error('Could not update Supabase account password:', error);
+      throw new Error(error.message);
+    }
   };
 
   const handleToggleSave = (scheme: Scheme) => {
@@ -328,33 +472,35 @@ export default function App() {
 
   // Filter schemes based on search query and category tags
   const filteredSchemes = GOV_SCHEMES.filter(scheme => {
-    // Search filter
-    const matchesSearch = !searchQuery || 
-      scheme.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.titlePa.includes(searchQuery) ||
-      scheme.titleHi.includes(searchQuery) ||
-      scheme.descriptionEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.categoryTags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = matchesSchemeSearch(scheme, searchQuery);
 
     // Category filter
     let matchesCategory = true;
     if (activeCategoryFilter !== 'all') {
       if (activeCategoryFilter === 'Saved') {
         matchesCategory = savedSchemeIds.has(scheme.id);
-      } else if (activeCategoryFilter === 'BPL') {
-        matchesCategory = (scheme.maxIncome !== undefined && scheme.maxIncome <= 180000) || scheme.categoryTags.includes('BPL Families');
-      } else if (activeCategoryFilter === 'Loans') {
-        matchesCategory = scheme.benefitType === 'Loan/Credit' || scheme.categoryTags.includes('Subsidized Finance');
       } else {
-        matchesCategory = scheme.categoryTags.some(tag => tag.toLowerCase().includes(activeCategoryFilter.toLowerCase()));
-      }
-    }
-
-    // Only confirmed eligible filter from search bar
-    if (onlyEligibleFilter) {
-      const evaluation = evaluationMap.get(scheme.id);
-      if (!evaluation?.isEligible) {
-        return false;
+        const categoryText = [
+          ...scheme.categoryTags,
+          scheme.titleEn,
+          scheme.descriptionEn,
+          scheme.benefitAmountText,
+          scheme.benefitType,
+          scheme.departmentEn,
+          ...(scheme.eligibleOccupations ?? []),
+        ].join(' ').toLowerCase();
+        const categoryTerms: Record<string, RegExp> = {
+          Agriculture: /farm|agri|crop|kisan|dairy|livestock|seed|irrigat/,
+          Health: /health|medical|hospital|treatment|medicine|care|insurance/,
+          Education: /education|student|scholarship|school|college|learning|tuition|girl child/,
+        };
+        if (activeCategoryFilter === 'Finance') {
+          const financeText = [scheme.categoryTags.join(' '), scheme.benefitType, scheme.benefitAmountText].join(' ').toLowerCase();
+          matchesCategory = scheme.benefitType !== 'Health Cover' && /finance|loan|credit|pension|subsidy|financial|saving|direct cash transfer|cash transfer|allowance|wage/.test(financeText);
+        } else {
+          matchesCategory = categoryTerms[activeCategoryFilter]?.test(categoryText)
+            ?? scheme.categoryTags.some(tag => tag.toLowerCase().includes(activeCategoryFilter.toLowerCase()));
+        }
       }
     }
 
@@ -454,11 +600,11 @@ export default function App() {
   const savedSchemes = GOV_SCHEMES.filter(s => savedSchemeIds.has(s.id));
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 selection:bg-teal-500 selection:text-white">
+    <div className="min-h-screen bg-white flex flex-col font-sans text-slate-900 selection:bg-blue-100 selection:text-slate-900">
       {/* Top Navbar */}
       <Navbar
         currentLang={currentLang}
-        onLanguageChange={setCurrentLang}
+        onLanguageChange={handleLanguageChange}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         savedCount={savedSchemeIds.size}
@@ -473,199 +619,39 @@ export default function App() {
         }}
       />
 
-      {/* Hero Section */}
-      <HeroBanner
-        currentLang={currentLang}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        onStartWizard={() => {
-          setActiveTab('wizard');
-          window.scrollTo({ top: 300, behavior: 'smooth' });
-        }}
-        onOpenFamilyFinder={() => setActiveTab('family')}
-        activeFilter={activeCategoryFilter}
-        onFilterChange={setActiveCategoryFilter}
-        totalSchemesCount={GOV_SCHEMES.length}
-        savedCount={savedSchemeIds.size}
-        profile={profile}
-        onProfileChange={setProfile}
-        onlyEligibleFilter={onlyEligibleFilter}
-        onToggleOnlyEligible={setOnlyEligibleFilter}
-        eligibleCount={eligibleCount}
-      />
+      {activeTab === 'dashboard' && (
+        <HeroBanner
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          onStartWizard={() => setActiveTab('wizard')}
+          onOpenFamilyFinder={() => setActiveTab('family')}
+          activeFilter={activeCategoryFilter}
+          onFilterChange={setActiveCategoryFilter}
+          onAskAI={() => {
+            setAssistantInitialQuestion(searchQuery.trim());
+            setIsVoiceAssistantOpen(true);
+          }}
+        />
+      )}
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full">
-        {/* Fraud Protection Safety Alert Banner */}
-        <FraudProtectionBanner currentLang={currentLang} />
-
-        {/* Quick Innovation Action Bar for Hackathon Judges & Citizens */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 mb-6">
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('insights');
-              window.scrollTo({ top: 350, behavior: 'smooth' });
-            }}
-            className="p-3 bg-white hover:bg-teal-50/60 rounded-xl border border-slate-200 hover:border-teal-300 text-left transition-all shadow-2xs group cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider">Analytics</span>
-              <PieIcon className="w-4 h-4 text-teal-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="text-xs font-bold text-slate-900 line-clamp-1">
-              Dashboard Insights
-            </div>
-            <div className="text-[10px] text-slate-500">
-              Pie chart &amp; category split
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('video-guides');
-              window.scrollTo({ top: 350, behavior: 'smooth' });
-            }}
-            className="p-3 bg-white hover:bg-rose-50/60 rounded-xl border border-slate-200 hover:border-rose-300 text-left transition-all shadow-2xs group cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider">Video Guide</span>
-              <Youtube className="w-4 h-4 text-rose-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="text-xs font-bold text-slate-900 line-clamp-1">
-              YouTube Tutorials
-            </div>
-            <div className="text-[10px] text-slate-500">
-              How to apply on .gov.in
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleOpenScanner()}
-            className="p-3 bg-white hover:bg-emerald-50/60 rounded-xl border border-slate-200 hover:border-emerald-300 text-left transition-all shadow-2xs group cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">AI Scanner</span>
-              <Scan className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="text-xs font-bold text-slate-900 line-clamp-1">
-              Missing Doc Detector
-            </div>
-            <div className="text-[10px] text-slate-500">
-              Scan &amp; verify certificates
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('deadlines');
-              window.scrollTo({ top: 350, behavior: 'smooth' });
-            }}
-            className="p-3 bg-white hover:bg-amber-50/60 rounded-xl border border-slate-200 hover:border-amber-300 text-left transition-all shadow-2xs group cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Countdowns</span>
-              <Clock className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="text-xs font-bold text-slate-900 line-clamp-1">
-              Deadline Reminders
-            </div>
-            <div className="text-[10px] text-slate-500">
-              e-KYC &amp; cut-off alerts
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsFraudModalOpen(true)}
-            className="p-3 bg-white hover:bg-red-50/60 rounded-xl border border-slate-200 hover:border-red-300 text-left transition-all shadow-2xs group cursor-pointer"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-bold text-red-700 uppercase tracking-wider">Anti-Scam</span>
-              <ShieldAlert className="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="text-xs font-bold text-slate-900 line-clamp-1">
-              Cyber Fraud Shield
-            </div>
-            <div className="text-[10px] text-slate-500">
-              Fake link check &amp; 1930
-            </div>
-          </button>
-        </div>
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
 
         {/* TAB: DASHBOARD & SCHEME DIRECTORY */}
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            {/* Quick Profile Summary Bar */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
-                  {profile.occupation[0]}
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-900">
-                    Active Citizen Profile: {profile.occupation} • Age {profile.age} • {profile.category} • {profile.district}
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Household Income: ₹{profile.annualIncome.toLocaleString('en-IN')}/yr • Land: {profile.landholdingAcres} Acres
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                  {eligibleCount} Confirmed Matches
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setIsAiRoadmapOpen(true)}
-                  className="text-xs font-bold text-amber-950 bg-gradient-to-r from-amber-100 to-orange-100 hover:from-amber-200 hover:to-orange-200 border border-amber-300 px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600 fill-amber-300" />
-                  <span>AI Welfare Roadmap</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowDashboardInsights(!showDashboardInsights)}
-                  className="text-xs font-bold text-teal-700 hover:text-teal-800 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
-                >
-                  <PieIcon className="w-3.5 h-3.5" />
-                  <span>{showDashboardInsights ? 'Hide Insights' : 'View Insights'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('wizard')}
-                  className="text-xs font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg transition-colors cursor-pointer"
-                >
-                  Edit Profile
-                </button>
-              </div>
-            </div>
-
-            {/* Dashboard Insights Section with Recharts Pie Chart */}
-            {showDashboardInsights && (
-              <DashboardInsights
-                schemes={GOV_SCHEMES}
-                evaluations={evaluations}
-                profile={profile}
-                currentLang={currentLang}
-                onSelectCategory={(cat) => {
-                  setActiveCategoryFilter(cat);
-                }}
-                onOpenScheme={(s) => handleOpenSchemeDetails(s, 'overview')}
-              />
-            )}
-
+          <div className="space-y-5">
             {/* Scheme Cards Grid */}
-            <div className="flex items-center justify-between pb-1">
-              <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
-                Government Welfare Schemes ({filteredSchemes.length})
-              </h2>
-              <span className="text-xs text-slate-500 font-medium">
-                Sorted by Eligibility Match Percentage
+            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <h2 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
+                  Explore government schemes
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Discover benefits and support matched to your needs.
+                </p>
+              </div>
+              <span className="text-sm font-medium text-slate-500">
+                {filteredSchemes.length} {filteredSchemes.length === 1 ? 'scheme' : 'schemes'}
               </span>
             </div>
 
@@ -706,16 +692,57 @@ export default function App() {
                 </button>
               </div>
             )}
+
+            {managedSites.length > 0 && (
+              <section className="space-y-4 pt-5">
+                <div>
+                  <h2 className="text-xl font-semibold tracking-tight text-slate-900">More official scheme portals</h2>
+                  <p className="mt-1 text-sm text-slate-500">Official resources added by authorized administrators.</p>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {managedSites.map(site => (
+                    <article key={site.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">{site.category}</p>
+                      <h3 className="mt-2 text-base font-semibold text-slate-900">{site.title}</h3>
+                      {site.description && <p className="mt-2 text-sm leading-6 text-slate-600">{site.description}</p>}
+                      <a href={site.url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline">
+                        Visit official portal <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
         {/* TAB: ELIGIBILITY WIZARD */}
-        {activeTab === 'wizard' && (
+        {(activeTab === 'wizard' || activeTab === 'profile') && (
           <div className="space-y-6">
+            {activeTab === 'profile' && (
+              <header className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('dashboard')}
+                  className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-200"
+                >
+                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                  Back to home
+                </button>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Private citizen profile</p>
+                <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">My Profile</h1>
+                <p className="mt-2 text-sm text-slate-600">
+                  Your eligibility details are saved on this device. Sign in to sync them securely to your Supabase account. {authUser ? cloudSyncStatus : ''}
+                </p>
+              </header>
+            )}
             <ProfileWizard
               currentLang={currentLang}
               profile={profile}
               onChange={setProfile}
+              onSaveProfile={handleSaveProfile}
+              onSetPassword={handleSetPassword}
+              accountEmail={authUser?.email ?? null}
               onReset={() => setProfile(DEFAULT_PROFILE)}
               onApply={() => {
                 setActiveTab('dashboard');
@@ -752,6 +779,14 @@ export default function App() {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'admin' && (
+          <AdminConsole
+            user={authUser}
+            sites={managedSites}
+            onSitesChange={setManagedSites}
+          />
         )}
 
         {/* TAB: DASHBOARD INSIGHTS */}
@@ -1009,6 +1044,23 @@ export default function App() {
         onClose={() => setIsVoiceAssistantOpen(false)}
         currentLang={currentLang}
         userProfile={profile}
+        initialQuestion={assistantInitialQuestion}
+        onInitialQuestionHandled={() => setAssistantInitialQuestion('')}
+        onAppAction={(action) => {
+          if (action.type === 'search') {
+            setSearchQuery(action.query);
+            setActiveCategoryFilter('all');
+            setActiveTab('dashboard');
+            return;
+          }
+          if (action.type === 'filter') {
+            setActiveCategoryFilter(action.category);
+            setActiveTab('dashboard');
+            return;
+          }
+          setActiveTab(action.tab);
+          if (action.tab === 'dashboard') window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         onOpenSchemeModal={(s) => {
           setIsVoiceAssistantOpen(false);
           setSelectedScheme(s);
@@ -1019,16 +1071,19 @@ export default function App() {
         <button
           type="button"
           onClick={() => setIsVoiceAssistantOpen(true)}
-          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-blue-800 px-4 py-3 text-sm font-bold text-white shadow-xl shadow-blue-900/25 transition hover:bg-blue-900 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-300"
-          aria-label="Open Voice AI in Punjabi or English"
+          className="fixed bottom-5 right-5 z-40 inline-flex min-h-16 items-center gap-3 rounded-full bg-blue-700 px-6 text-base font-semibold text-white shadow-2xl shadow-blue-900/30 transition hover:-translate-y-0.5 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 sm:bottom-7 sm:right-7"
+          aria-label="Open multilingual Voice AI"
         >
-          <Bot className="h-5 w-5" aria-hidden="true" />
-          <span>Voice AI (ਪੰਜਾਬੀ / English)</span>
+          <Mic className="h-6 w-6" aria-hidden="true" />
+          <span>Voice AI</span>
         </button>
       )}
 
       {/* Official Government Footer */}
       <footer className="bg-slate-900 text-slate-300 text-xs py-8 border-t border-slate-800 mt-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <FraudProtectionBanner currentLang={currentLang} />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pb-6 border-b border-slate-800">
             <div className="space-y-2 md:col-span-2">

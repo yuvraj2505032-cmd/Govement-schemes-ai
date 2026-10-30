@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Language, CitizenProfile, Scheme } from '../types/scheme';
+import type { AssistantAppAction } from '../../../shared/types/backend';
 import { TRANSLATIONS } from '../data/translations';
 import { GOV_SCHEMES } from '../data/schemes';
 import { 
@@ -30,11 +31,39 @@ interface ChatMessage {
   officialSources?: Array<{ title: string; url: string }>;
 }
 
+const VOICE_LANGUAGES = [
+  { code: 'pa-IN', label: 'ਪੰਜਾਬੀ' },
+  { code: 'hi-IN', label: 'हिन्दी' },
+  { code: 'en-IN', label: 'English (India)' },
+  { code: 'bn-IN', label: 'বাংলা' },
+  { code: 'gu-IN', label: 'ગુજરાતી' },
+  { code: 'kn-IN', label: 'ಕನ್ನಡ' },
+  { code: 'ml-IN', label: 'മലയാളം' },
+  { code: 'mr-IN', label: 'मराठी' },
+  { code: 'or-IN', label: 'ଓଡ଼ିଆ' },
+  { code: 'ta-IN', label: 'தமிழ்' },
+  { code: 'te-IN', label: 'తెలుగు' },
+  { code: 'ur-IN', label: 'اردو' },
+  { code: 'as-IN', label: 'অসমীয়া' },
+  { code: 'ne-NP', label: 'नेपाली' },
+  { code: 'kok-IN', label: 'कोंकणी' },
+  { code: 'sd-IN', label: 'سنڌي' },
+  { code: 'ks-IN', label: 'कॉशुर' },
+  { code: 'doi-IN', label: 'डोगरी' },
+  { code: 'mai-IN', label: 'मैथिली' },
+  { code: 'mni-IN', label: 'মৈতৈলোন্' },
+  { code: 'sa-IN', label: 'संस्कृतम्' },
+  { code: 'sat-IN', label: 'ᱥᱟᱱᱛᱟᱲᱤ' },
+];
+
 interface ChatbotDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   currentLang: Language;
   userProfile: CitizenProfile;
+  initialQuestion: string;
+  onInitialQuestionHandled: () => void;
+  onAppAction: (action: AssistantAppAction) => void;
   onOpenSchemeModal: (scheme: Scheme) => void;
 }
 
@@ -43,6 +72,9 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   onClose,
   currentLang,
   userProfile,
+  initialQuestion,
+  onInitialQuestionHandled,
+  onAppAction,
   onOpenSchemeModal
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -53,8 +85,11 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
   
-  // Dedicated Voice & Assistant Language (defaults to current app language or Punjabi/English)
+  // The speech locale follows the user's selection; text labels remain translated in supported app languages.
   const [assistantLang, setAssistantLang] = useState<Language>(currentLang || 'pa');
+  const [voiceLanguage, setVoiceLanguage] = useState(
+    currentLang === 'pa' ? 'pa-IN' : currentLang === 'hi' ? 'hi-IN' : 'en-IN'
+  );
   // Auto-speak responses after AI finishes answering
   const [autoSpeakEnabled, setAutoSpeakEnabled] = useState<boolean>(true);
   // Citizen Consent Checkbox state (DPDP Act compliance)
@@ -69,19 +104,26 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   useEffect(() => {
     if (isOpen) {
       setAssistantLang(currentLang);
+      setVoiceLanguage(currentLang === 'pa' ? 'pa-IN' : currentLang === 'hi' ? 'hi-IN' : 'en-IN');
     }
   }, [isOpen, currentLang]);
+
+  useEffect(() => {
+    if (!isOpen || !initialQuestion) return;
+    setInputText(initialQuestion);
+    onInitialQuestionHandled();
+  }, [isOpen, initialQuestion, onInitialQuestionHandled]);
 
   // Set welcome message based on selected assistant language
   useEffect(() => {
     if (messages.length === 0) {
       let initialGreeting = '';
       if (assistantLang === 'pa') {
-        initialGreeting = `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! ਮੈਂ ਪੰਜਾਬ ਸਰਕਾਰੀ ਸਕੀਮ ਏ.ਆਈ ਸਹਾਇਕ ਹਾਂ। ਤੁਸੀਂ ਮੇਰੇ ਨਾਲ ਪੰਜਾਬੀ ਜਾਂ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਬੋਲ ਕੇ ਸਵਾਲ ਪੁੱਛ ਸਕਦੇ ਹੋ। ਮੈਂ ਤੁਹਾਨੂੰ ਯੋਗਤਾ, ਦਸਤਾਵੇਜ਼ ਅਤੇ ਅਪਲਾਈ ਕਰਨ ਦੇ ਅਧਿਕਾਰਤ ਤਰੀਕੇ ਦੱਸਾਂਗਾ।`;
+        initialGreeting = `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! ਮੈਂ ਜਨਸਹਾਇਕ AI ਹਾਂ। ਉੱਪਰੋਂ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣ ਕੇ ਬੋਲੋ ਜਾਂ ਸਵਾਲ ਲਿਖੋ। ਮੈਂ ਤੁਹਾਨੂੰ ਯੋਗਤਾ, ਦਸਤਾਵੇਜ਼ ਅਤੇ ਅਧਿਕਾਰਤ ਅਰਜ਼ੀ ਦੇ ਤਰੀਕਿਆਂ ਬਾਰੇ ਮਦਦ ਕਰਾਂਗਾ।`;
       } else if (assistantLang === 'hi') {
-        initialGreeting = `नमस्ते! मैं पंजाब सरकारी योजना एआई सहायक हूँ। आप मुझसे बोलकर या लिखकर किसानों, महिलाओं, छात्रों या पेंशन के बारे में पूछ सकते हैं।`;
+        initialGreeting = `नमस्ते! मैं जनसहायक AI हूँ। ऊपर अपनी भाषा चुनें और बोलकर या लिखकर प्रश्न पूछें। मैं पात्रता, दस्तावेज़ों और आधिकारिक आवेदन प्रक्रिया में मदद कर सकता हूँ।`;
       } else {
-        initialGreeting = `Hello! I am your Punjab & Central Government Scheme AI Voice Assistant. Speak or type your questions in English or Punjabi to discover verified welfare schemes, eligibility rules, and official application portals.`;
+        initialGreeting = `Hello! I am Jansahayak AI. Choose a language above, then speak or type your question about government schemes, eligibility, documents, or official application steps.`;
       }
 
       setMessages([
@@ -102,7 +144,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading, liveTranscript]);
 
-  // Setup Web Speech API for voice recognition with accurate Punjabi & English support
+  // Browser speech recognition availability and language coverage vary by device.
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -110,8 +152,8 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       recognition.continuous = false;
       recognition.interimResults = true; // Show live transcript as citizen speaks
 
-      // Set recognition language: pa-IN for Punjabi, en-IN for Indian English, hi-IN for Hindi
-      recognition.lang = assistantLang === 'pa' ? 'pa-IN' : assistantLang === 'hi' ? 'hi-IN' : 'en-IN';
+      // Use the selected locale for speech recognition.
+      recognition.lang = voiceLanguage;
 
       recognition.onstart = () => {
         setIsListening(true);
@@ -170,18 +212,13 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         window.speechSynthesis.cancel();
       }
     };
-  }, [assistantLang]);
+  }, [voiceLanguage]);
 
-  const toggleListening = (forcedLang?: Language) => {
+  const toggleListening = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       setSpeechError(t.speechNotSupported);
       return;
-    }
-
-    const targetLang = forcedLang || assistantLang;
-    if (forcedLang && forcedLang !== assistantLang) {
-      setAssistantLang(forcedLang);
     }
 
     if (isListening) {
@@ -201,7 +238,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
           setSpeakingMessageId(null);
         }
         if (recognitionRef.current) {
-          recognitionRef.current.lang = targetLang === 'pa' ? 'pa-IN' : targetLang === 'hi' ? 'hi-IN' : 'en-IN';
+          recognitionRef.current.lang = voiceLanguage;
           recognitionRef.current.start();
         }
       } catch (err) {
@@ -210,8 +247,8 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
     }
   };
 
-  // Text-To-Speech with Punjabi & English voice fallbacks
-  const handleSpeak = (msgId: string, text: string, langToUse?: Language) => {
+  // Use a matching system voice when the selected language is installed.
+  const handleSpeak = (msgId: string, text: string, localeToUse = voiceLanguage) => {
     if (!('speechSynthesis' in window)) return;
 
     if (speakingMessageId === msgId) {
@@ -229,35 +266,16 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    const lang = langToUse || assistantLang;
+    const lang = localeToUse;
 
     // Intelligent voice discovery
     const voices = window.speechSynthesis.getVoices();
-    if (lang === 'pa') {
-      utterance.lang = 'pa-IN';
-      // Look for Punjabi voice, fallback to Hindi voice (which correctly articulates North Indian terminology)
-      const paVoice = voices.find(v => v.lang.startsWith('pa') || v.name.toLowerCase().includes('punjabi'));
-      const hiVoice = voices.find(v => v.lang.startsWith('hi') || v.name.toLowerCase().includes('hindi'));
-      if (paVoice) {
-        utterance.voice = paVoice;
-      } else if (hiVoice) {
-        utterance.voice = hiVoice;
-      }
-      utterance.rate = 0.9;
-    } else if (lang === 'hi') {
-      utterance.lang = 'hi-IN';
-      const hiVoice = voices.find(v => v.lang.startsWith('hi'));
-      if (hiVoice) utterance.voice = hiVoice;
-      utterance.rate = 0.92;
-    } else {
-      utterance.lang = 'en-IN';
-      // Look for Indian English voice or standard English
-      const enInVoice = voices.find(v => v.lang === 'en-IN' || v.name.toLowerCase().includes('india'));
-      if (enInVoice) {
-        utterance.voice = enInVoice;
-      }
-      utterance.rate = 0.95;
-    }
+    utterance.lang = lang;
+    const languagePrefix = lang.split('-')[0].toLowerCase();
+    const matchingVoice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase())
+      ?? voices.find(v => v.lang.toLowerCase().startsWith(`${languagePrefix}-`));
+    if (matchingVoice) utterance.voice = matchingVoice;
+    utterance.rate = languagePrefix === 'pa' || languagePrefix === 'hi' ? 0.9 : 0.95;
 
     utterance.onend = () => setSpeakingMessageId(null);
     utterance.onerror = () => setSpeakingMessageId(null);
@@ -288,7 +306,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: query,
-          language: assistantLang,
+          language: voiceLanguage,
           userProfile,
           consentGiven: hasConsent,
           conversationHistory: messages.slice(-4).map(m => ({ role: m.sender, content: m.text }))
@@ -300,6 +318,31 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       }
 
       const data = await response.json();
+      if (typeof data.reply !== 'string' || !data.reply.trim()) {
+        throw new Error(typeof data.error === 'string' ? data.error : 'The assistant returned an empty response.');
+      }
+      if (data.action) {
+        const action = data.action as AssistantAppAction;
+        if (
+          action.type === 'search' &&
+          typeof action.query === 'string' &&
+          action.query.trim().length > 0 &&
+          action.query.length <= 120
+        ) {
+          onAppAction({ type: 'search', query: action.query.trim() });
+        } else if (action.type === 'navigate') {
+          const allowedTabs = new Set([
+            'dashboard', 'profile', 'wizard', 'saved', 'insights', 'family',
+            'video-guides', 'scanner', 'whatif', 'districts', 'deadlines', 'tracker'
+          ]);
+          if (allowedTabs.has(action.tab)) onAppAction(action);
+        } else if (
+          action.type === 'filter' &&
+          ['all', 'Agriculture', 'Health', 'Education', 'Finance'].includes(action.category)
+        ) {
+          onAppAction(action);
+        }
+      }
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,
@@ -308,7 +351,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         recommendedSchemeIds: data.recommendedSchemeIds || [],
         officialSources: data.officialSources || [],
-        isAiGrounded: true
+        isAiGrounded: data.isAiGrounded === true
       };
 
       setMessages(prev => [...prev, assistantMsg]);
@@ -316,7 +359,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       // If Auto-speak is enabled, automatically read the response aloud
       if (autoSpeakEnabled) {
         setTimeout(() => {
-          handleSpeak(assistantMsg.id, assistantMsg.text, assistantLang);
+          handleSpeak(assistantMsg.id, assistantMsg.text, voiceLanguage);
         }, 200);
       }
     } catch (err) {
@@ -335,7 +378,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
     }
   };
 
-  // Dedicated Voice Prompts in Punjabi and English
+  // Scheme-focused examples are provided in Punjabi and English.
   const punjabiVoicePrompts = [
     'ਮੈਂ ਕਿਸਾਨ ਹਾਂ, ਮੈਨੂੰ ਕਿਹੜੀ ਸਕੀਮ ਮਿਲੇਗੀ?',
     'ਬੁਢਾਪਾ ਪੈਨਸ਼ਨ ਦੇ ਨਿਯਮ ਅਤੇ ਕਾਗਜ਼ ਦੱਸੋ',
@@ -354,6 +397,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
     'What is the Punjab 300 Units Free Electricity Scheme rule?'
   ];
 
+  const selectedVoiceLanguage = VOICE_LANGUAGES.find(language => language.code === voiceLanguage)?.label ?? 'selected language';
   const activePrompts = assistantLang === 'pa' ? punjabiVoicePrompts : englishVoicePrompts;
 
   if (!isOpen) return null;
@@ -370,12 +414,12 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
             </div>
             <div>
               <h3 className="font-extrabold text-sm sm:text-base text-white flex items-center gap-1.5">
-                <span>{assistantLang === 'pa' ? 'ਪੰਜਾਬ ਸਕੀਮ ਏ.ਆਈ ਆਵਾਜ਼ ਸਹਾਇਕ' : 'Punjab Scheme AI Voice Assistant'}</span>
+                <span>{assistantLang === 'pa' ? 'ਜਨਸਹਾਇਕ AI ਆਵਾਜ਼ ਸਹਾਇਕ' : 'Jansahayak AI Voice Assistant'}</span>
                 <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
               </h3>
               <span className="text-[11px] text-teal-200 font-medium flex items-center gap-1">
                 <Radio className="w-3 h-3 text-teal-400 animate-pulse" />
-                Punjabi (ਪੰਜਾਬੀ) &amp; English Voice Engine
+                22 Indian languages · speech support varies by device
               </span>
             </div>
           </div>
@@ -393,49 +437,33 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         {/* Voice Assistant Controls: Language switcher and Auto-Speak switch */}
         <div className="flex items-center justify-between pt-2 border-t border-white/15 gap-2 text-xs">
           {/* Language Switcher right inside the Voice Assistant */}
-          <div className="flex items-center bg-black/25 p-0.5 rounded-lg border border-white/10">
-            <button
-              type="button"
-              onClick={() => {
-                setAssistantLang('pa');
+          <div className="flex min-w-0 items-center gap-2">
+            <label htmlFor="assistant-language" className="shrink-0 text-[10px] font-semibold text-slate-200">
+              Language
+            </label>
+            <select
+              id="assistant-language"
+              value={voiceLanguage}
+              onChange={(event) => {
+                const locale = event.target.value;
+                setVoiceLanguage(locale);
+                const language = locale.split('-')[0];
+                if (language === 'pa' || language === 'hi' || language === 'en') {
+                  setAssistantLang(language);
+                } else {
+                  setAssistantLang('en');
+                }
                 if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                setSpeakingMessageId(null);
               }}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                assistantLang === 'pa'
-                  ? 'bg-teal-500 text-slate-950 shadow-xs'
-                  : 'text-slate-200 hover:text-white'
-              }`}
+              className="min-w-0 max-w-36 rounded-lg border border-white/20 bg-slate-950/60 px-2.5 py-1.5 text-xs font-semibold text-white outline-none focus:ring-2 focus:ring-teal-300"
             >
-              🇮🇳 ਪੰਜਾਬੀ
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setAssistantLang('en');
-                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-              }}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                assistantLang === 'en'
-                  ? 'bg-teal-500 text-slate-950 shadow-xs'
-                  : 'text-slate-200 hover:text-white'
-              }`}
-            >
-              🇬🇧 English
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setAssistantLang('hi');
-                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-              }}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                assistantLang === 'hi'
-                  ? 'bg-teal-500 text-slate-950 shadow-xs'
-                  : 'text-slate-200 hover:text-white'
-              }`}
-            >
-              हिन्दी
-            </button>
+              {VOICE_LANGUAGES.map(language => (
+                <option key={language.code} value={language.code} className="bg-white text-slate-900">
+                  {language.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Auto-Speak Answers Toggle */}
@@ -543,12 +571,14 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
                   <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-100 text-[10px] font-bold text-teal-800">
                     <span className="flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
-                      {assistantLang === 'pa' ? 'ਪ੍ਰਮਾਣਿਤ ਸਰਕਾਰੀ ਜਾਣਕਾਰੀ' : 'Official Grounded Information'}
+                      {assistantLang === 'pa'
+                        ? msg.isAiGrounded ? 'ਪ੍ਰਮਾਣਿਤ ਸਰਕਾਰੀ ਜਾਣਕਾਰੀ' : 'ਜਨਸਹਾਇਕ AI'
+                        : msg.isAiGrounded ? 'Verified Scheme Information' : 'Jansahayak AI'}
                     </span>
 
                     <button
                       type="button"
-                      onClick={() => handleSpeak(msg.id, msg.text, assistantLang)}
+                      onClick={() => handleSpeak(msg.id, msg.text)}
                       className={`flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold transition-all cursor-pointer ${
                         isSpeaking
                           ? 'bg-rose-100 text-rose-700 animate-pulse'
@@ -685,10 +715,10 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
           />
           <span className="text-[10px] sm:text-[11px]">
             {assistantLang === 'pa' 
-              ? 'ਮੈਂ ਆਪਣਾ ਸਵਾਲ/ਪ੍ਰੋਫਾਈਲ AI ਸੇਵਾਵਾਂ ਨੂੰ ਭੇਜਣ ਲਈ ਸਹਿਮਤ ਹਾਂ (ਇਹ ਐਪ ਡਾਟਾ ਸਟੋਰ ਨਹੀਂ ਕਰਦੀ)'
+              ? 'ਮੈਂ ਇਹ ਗੱਲਬਾਤ ਅਤੇ ਚੋਣਵਾਂ ਪ੍ਰੋਫਾਈਲ ਤੀਜੀ-ਧਿਰ AI/search ਸੇਵਾਵਾਂ ਨੂੰ ਭੇਜਣ ਲਈ ਸਹਿਮਤ ਹਾਂ।'
               : assistantLang === 'hi'
-              ? 'मैं सवाल/प्रोफ़ाइल AI सेवाओं को भेजने की सहमति देता/देती हूँ (यह ऐप डेटा स्टोर नहीं करता)'
-              : 'I consent to send my question/profile to AI services; this app does not store it'}
+              ? 'मैं यह बातचीत और वैकल्पिक प्रोफ़ाइल तीसरे पक्ष की AI/search सेवाओं को भेजने के लिए सहमत हूँ।'
+              : 'I consent to send this chat and optional profile fields to third-party AI/search providers.'}
           </span>
         </label>
         <span className="text-[9px] sm:text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1">
@@ -718,7 +748,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
             title={
               assistantLang === 'pa'
                 ? 'ਪੰਜਾਬੀ ਵਿੱਚ ਬੋਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ'
-                : 'Click to speak in English or Punjabi'
+                : `Click to speak in ${selectedVoiceLanguage}`
             }
             aria-label="Voice input"
           >
@@ -743,8 +773,8 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
             onChange={(e) => setInputText(e.target.value)}
             placeholder={
               assistantLang === 'pa'
-                ? 'ਪੰਜਾਬੀ ਜਾਂ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਪੁੱਛੋ (ਜਿਵੇਂ ਕਿ "ਮੈਂ ਕਿਸਾਨ ਹਾਂ, ਮੈਨੂੰ ਕਿਹੜੀ ਸਕੀਮ ਮਿਲੇਗੀ?")...'
-                : 'Ask in English or Punjabi (e.g., "Farmer schemes in Ludhiana", "Old age pension rules")...'
+                ? 'ਆਪਣੀ ਚੁਣੀ ਹੋਈ ਭਾਸ਼ਾ ਵਿੱਚ ਆਪਣਾ ਸਵਾਲ ਪੁੱਛੋ...'
+                : `Ask in ${selectedVoiceLanguage}...`
             }
             className="flex-1 px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium"
           />
