@@ -1,0 +1,6 @@
+{
+  "name": "Punjab Scheme Navigator AI",
+  "description": "Government Scheme Eligibility Navigator Chatbot (CTBF-AI-07) for Punjab & Central schemes with multilingual voice assistant, family benefit finder, and smart document checklist.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

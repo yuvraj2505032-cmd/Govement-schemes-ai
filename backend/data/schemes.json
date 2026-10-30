@@ -1,0 +1,599 @@
+[
+  {
+    "id": "pm-kisan",
+    "name": "PM-KISAN Samman Nidhi",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਕਿਸਾਨ ਸਨਮਾਨ ਨਿਧੀ ਯੋਜਨਾ",
+    "nameHi": "प्रधानमंत्री किसान सम्मान निधि योजना",
+    "level": "Central Government",
+    "ministry": "Ministry of Agriculture & Farmers Welfare, Govt of India",
+    "ministryPa": "ਖੇਤੀਬਾੜੀ ਅਤੇ ਕਿਸਾਨ ਭਲਾਈ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "कृषि एवं किसान कल्याण मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["Farmer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "₹6,000 per year directly transferred to bank account in 3 equal 4-monthly installments of ₹2,000 each.",
+    "benefitsPa": "ਹਰ ਸਾਲ ₹6,000 ਦੀ ਸਿੱਧੀ ਵਿੱਤੀ ਸਹਾਇਤਾ ਤਿੰਨ ਕਿਸ਼ਤਾਂ (₹2,000 ਹਰ 4 ਮਹੀਨੇ) ਵਿੱਚ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਭੇਜੀ ਜਾਂਦੀ ਹੈ।",
+    "benefitsHi": "₹6,000 प्रति वर्ष 3 समान किस्तों (₹2,000 प्रत्येक) में सीधे बैंक खाते में हस्तांतरित।",
+    "documents": [
+      "Aadhaar Card linked with Mobile",
+      "Land Record (Fard / Jamabandi)",
+      "Active Bank Passbook (NPCI Aadhar Seeded)"
+    ],
+    "officialLink": "https://pmkisan.gov.in",
+    "sourceDoc": "Operational Guidelines of PM-KISAN, Ministry of Agriculture & Farmers Welfare (pmkisan.gov.in)"
+  },
+  {
+    "id": "pm-fasal-bima",
+    "name": "PM Fasal Bima Yojana (PMFBY)",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਫ਼ਸਲ ਬੀਮਾ ਯੋਜਨਾ",
+    "nameHi": "प्रधानमंत्री फसल बीमा योजना",
+    "level": "Central Government",
+    "ministry": "Ministry of Agriculture & Farmers Welfare, Govt of India",
+    "ministryPa": "ਖੇਤੀਬਾੜੀ ਅਤੇ ਕਿਸਾਨ ਭਲਾਈ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "कृषि एवं किसान कल्याण मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["Farmer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Comprehensive crop insurance against non-preventable natural risks from pre-sowing to post-harvest at nominal premium (1.5% - 2%).",
+    "benefitsPa": "ਕੁਦਰਤੀ ਆਫ਼ਤਾਂ, ਸੋਕੇ ਜਾਂ ਹੜ੍ਹ ਕਾਰਨ ਫ਼ਸਲ ਖ਼ਰਾਬ ਹੋਣ 'ਤੇ ਪੂਰਾ ਮੁਆਵਜ਼ਾ, ਸਿਰਫ਼ 1.5% ਤੋਂ 2% ਪ੍ਰੀਮੀਅਮ 'ਤੇ।",
+    "benefitsHi": "प्राकृतिक आपदाओं से फसल नुकसान पर व्यापक बीमा सुरक्षा, केवल 1.5% से 2% प्रीमियम पर।",
+    "documents": [
+      "Aadhaar Card",
+      "Land Ownership Certificate / Tenancy Agreement",
+      "Sowing Certificate issued by Patwari/Village Sarpanch",
+      "Bank Account Passbook"
+    ],
+    "officialLink": "https://pmfby.gov.in",
+    "sourceDoc": "Revised Operational Guidelines of PMFBY, Govt of India (pmfby.gov.in)"
+  },
+  {
+    "id": "pm-awas-gramin",
+    "name": "Pradhan Mantri Awas Yojana (Gramin)",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਆਵਾਸ ਯੋਜਨਾ (ਗ੍ਰਾਮੀਣ)",
+    "nameHi": "प्रधानमंत्री आवास योजना (ग्रामीण)",
+    "level": "Central Government",
+    "ministry": "Ministry of Rural Development, Govt of India",
+    "ministryPa": "ਪੇਂਡੂ ਵਿਕਾਸ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "ग्रामीण विकास मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": 180000,
+      "occupations": ["Agricultural Labourer", "Daily Wage Worker", "Homemaker", "Unemployed Youth", "Artisan/Craftsperson"],
+      "categories": ["SC", "ST", "OBC/BC", "EWS", "General"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Financial assistance of ₹1.20 Lakh in plains for construction of pucca house with toilet (MGNREGA 90/95 days wage top-up).",
+    "benefitsPa": "ਪੱਕਾ ਮਕਾਨ ਬਣਾਉਣ ਲਈ ₹1.20 ਲੱਖ ਦੀ ਸਿੱਧੀ ਗ੍ਰਾਂਟ + ਮਨਰੇਗਾ ਤਹਿਤ 90 ਦਿਨਾਂ ਦੀ ਦਿਹਾੜੀ ਅਤੇ ਪਖਾਨੇ ਲਈ ₹12,000 ਵੱਖਰੇ।",
+    "benefitsHi": "पक्का मकान निर्माण हेतु ₹1.20 लाख की सहायता राशि + मनरेगा मजदूरी एवं शौचालय निर्माण अनुदान।",
+    "documents": [
+      "Aadhaar Card",
+      "SECC-2011 / Awas+ Household Registration ID",
+      "Bank Account details",
+      "Land / House site ownership document",
+      "Job Card number under MGNREGA"
+    ],
+    "officialLink": "https://pmayg.nic.in",
+    "sourceDoc": "PMAY-G Framework for Implementation, Ministry of Rural Development (pmayg.nic.in)"
+  },
+  {
+    "id": "post-matric-sc",
+    "name": "Post Matric Scholarship for SC Students",
+    "namePa": "ਡਾ. ਅੰਬੇਡਕਰ ਪੋਸਟ ਮੈਟ੍ਰਿਕ ਸਕਾਲਰਸ਼ਿਪ (ਐਸ.ਸੀ ਵਿਦਿਆਰਥੀ)",
+    "nameHi": "अनुसूचित जाति के छात्रों के लिए पोस्ट मैट्रिक छात्रवृत्ति",
+    "level": "Central Government",
+    "ministry": "Ministry of Social Justice & Empowerment, Govt of India",
+    "ministryPa": "ਸਮਾਜਿਕ ਨਿਆਂ ਅਤੇ ਅਧਿਕਾਰਤਾ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "सामाजिक न्याय एवं अधिकारिता मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 15,
+      "maxAge": 35,
+      "maxIncome": 250000,
+      "occupations": ["Student"],
+      "categories": ["SC"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "100% compulsory non-refundable fees reimbursement + academic maintenance allowance up to ₹13,500/year for higher education.",
+    "benefitsPa": "ਕਾਲਜ/ਯੂਨੀਵਰਸਿਟੀ ਦੀ 100% ਫੀਸ ਮੁਆਫੀ + ₹13,500 ਸਾਲਾਨਾ ਤੱਕ ਦਾ ਹੋਸਟਲ/ਕਿਤਾਬਾਂ ਦਾ ਭੱਤਾ।",
+    "benefitsHi": "कॉलेज एवं तकनीकी शिक्षा की 100% अनिवार्य फीस प्रतिपूर्ति + ₹13,500 वार्षिक तक अनुरक्षण भत्ता।",
+    "documents": [
+      "Aadhaar Card",
+      "Punjab SC Caste Certificate",
+      "Income Certificate (< ₹2.5 Lakh/yr)",
+      "10th/12th Marksheet & College Admission Fee Receipt",
+      "Bank Account seeded with Aadhaar"
+    ],
+    "officialLink": "https://scholarships.gov.in",
+    "sourceDoc": "Guidelines for Central Sector Scheme of Post Matric Scholarships to SC Students (socialjustice.gov.in)"
+  },
+  {
+    "id": "pm-ujjwala",
+    "name": "Pradhan Mantri Ujjwala Yojana (PMUY 2.0)",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਉੱਜਵਲਾ ਯੋਜਨਾ 2.0",
+    "nameHi": "प्रधानमंत्री उज्ज्वला योजना 2.0",
+    "level": "Central Government",
+    "ministry": "Ministry of Petroleum and Natural Gas, Govt of India",
+    "ministryPa": "ਪੈਟਰੋਲੀਅਮ ਅਤੇ ਕੁਦਰਤੀ ਗੈਸ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": 150000,
+      "occupations": ["Homemaker", "Daily Wage Worker", "Agricultural Labourer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "Female"
+    },
+    "benefits": "Deposit-free LPG cylinder connection, free first refill cylinder, free hotplate (stove), and ₹300 per cylinder targeted subsidy.",
+    "benefitsPa": "ਮੁਫ਼ਤ ਐਲ.ਪੀ.ਜੀ ਗੈਸ ਸਿਲੰਡਰ ਕੁਨੈਕਸ਼ਨ, ਪਹਿਲਾ ਸਿਲੰਡਰ ਮੁਫ਼ਤ ਭਰਿਆ ਹੋਇਆ ਅਤੇ ਮੁਫ਼ਤ ਗੈਸ ਚੁੱਲ੍ਹਾ।",
+    "benefitsHi": "निःशुल्क एलपीजी गैस कनेक्शन, पहला भरा हुआ सिलेंडर व गैस चूल्हा मुफ्त तथा ₹300 प्रति सिलेंडर सब्सिडी।",
+    "documents": [
+      "Aadhaar Card of Adult Woman Applicant",
+      "Ration Card proving family composition",
+      "Bank Account Number and IFSC",
+      "BPL / Low Income Declaration"
+    ],
+    "officialLink": "https://www.pmuy.gov.in",
+    "sourceDoc": "PMUY Operational Guidelines, MoPNG (pmuy.gov.in)"
+  },
+  {
+    "id": "pm-vishwakarma",
+    "name": "PM Vishwakarma Kaushal Samman",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਵਿਸ਼ਵਕਰਮਾ ਯੋਜਨਾ",
+    "nameHi": "प्रधानमंत्री विश्वकर्मा कौशल सम्मान योजना",
+    "level": "Central Government",
+    "ministry": "Ministry of Micro, Small & Medium Enterprises (MSME)",
+    "ministryPa": "ਸੂਖਮ, ਲਘੂ ਅਤੇ ਦਰਮਿਆਨੇ ਉਦਯੋਗ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["Artisan/Craftsperson", "Self-Employed/Shopkeeper"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Free skill training with ₹500/day stipend, ₹15,000 modern toolkit voucher, and collateral-free enterprise loan up to ₹3 Lakh at 5% interest.",
+    "benefitsPa": "ਕਾਰੀਗਰਾਂ ਲਈ ਮੁਫ਼ਤ ਸਿਖਲਾਈ ਦੌਰਾਨ ₹500 ਪ੍ਰਤੀ ਦਿਨ ਵਜ਼ੀਫਾ, ₹15,000 ਦੇ ਔਜ਼ਾਰ ਮੁਫ਼ਤ ਅਤੇ ₹3 ਲੱਖ ਤੱਕ ਬਿਨਾਂ ਗਾਰੰਟੀ ਸਸਤਾ ਕਰਜ਼ਾ (5% ਵਿਆਜ)।",
+    "benefitsHi": "कारीगरों हेतु ₹500/दिन वजीफे के साथ मुफ्त प्रशिक्षण, ₹15,000 का टूलकिट वाउचर एवं ₹3 लाख तक का सस्ता ऋण (5% ब्याज)।",
+    "documents": [
+      "Aadhaar Card",
+      "Mobile number linked to Aadhaar",
+      "Bank Account details",
+      "Declaration of traditional trade practice (Carpenter, Blacksmith, Cobbler, Mason, Barber, Tailor etc.)"
+    ],
+    "officialLink": "https://pmvishwakarma.gov.in",
+    "sourceDoc": "PM Vishwakarma Scheme Guidelines, Ministry of MSME (pmvishwakarma.gov.in)"
+  },
+  {
+    "id": "ayushman-bharat-pmjay",
+    "name": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (PM-JAY)",
+    "namePa": "ਆਯੁਸ਼ਮਾਨ ਭਾਰਤ - ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਜਨ ਆਰੋਗਿਆ ਯੋਜਨਾ",
+    "nameHi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (पीएम-जय)",
+    "level": "Central Government",
+    "ministry": "National Health Authority, Ministry of Health & Family Welfare",
+    "ministryPa": "ਰਾਸ਼ਟਰੀ ਸਿਹਤ ਅਥਾਰਟੀ, ਸਿਹਤ ਅਤੇ ਪਰਿਵਾਰ ਭਲਾਈ ਮੰਤਰਾਲਾ",
+    "ministryHi": "राष्ट्रीय स्वास्थ्य प्राधिकरण, स्वास्थ्य एवं परिवार कल्याण मंत्रालय",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 100,
+      "maxIncome": 250000,
+      "occupations": ["Farmer", "Agricultural Labourer", "Daily Wage Worker", "Artisan/Craftsperson", "Homemaker", "Unemployed Youth", "Senior Citizen"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Health insurance coverage of ₹5 Lakh per family per year for secondary and tertiary care hospitalization in empaneled public & private hospitals.",
+    "benefitsPa": "ਪੂਰੇ ਪਰਿਵਾਰ ਲਈ ਸਰਕਾਰੀ ਅਤੇ ਨਿੱਜੀ ਹਸਪਤਾਲਾਂ ਵਿੱਚ ਪ੍ਰਤੀ ਸਾਲ ₹5 ਲੱਖ ਤੱਕ ਦਾ ਬਿਲਕੁਲ ਮੁਫ਼ਤ ਇਲਾਜ (ਕੈਸ਼ਲੈੱਸ ਗੋਲਡਨ ਕਾਰਡ)।",
+    "benefitsHi": "सूचीबद्ध सरकारी एवं निजी अस्पतालों में प्रति परिवार प्रति वर्ष ₹5 लाख तक का कैशलेस मुफ्त इलाज।",
+    "documents": [
+      "Aadhaar Card",
+      "Ration Card / NFSA Blue Card",
+      "Ayushman Golden Card (generated at Sewa Kendra/Hospital)"
+    ],
+    "officialLink": "https://pmjay.gov.in",
+    "sourceDoc": "National Health Authority Guidelines on PM-JAY (pmjay.gov.in)"
+  },
+  {
+    "id": "pm-mudra",
+    "name": "Pradhan Mantri Mudra Yojana (PMMY)",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮੁਦਰਾ ਯੋਜਨਾ (PMMY)",
+    "nameHi": "प्रधानमंत्री मुद्रा योजना (पीएमएमवाई)",
+    "level": "Central Government",
+    "ministry": "Department of Financial Services, Ministry of Finance, Govt of India",
+    "ministryPa": "ਵਿੱਤੀ ਸੇਵਾਵਾਂ ਵਿਭਾਗ, ਵਿੱਤ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "वित्तीय सेवाएं विभाग, वित्त मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 65,
+      "maxIncome": null,
+      "occupations": ["Self-Employed/Shopkeeper", "Artisan/Craftsperson", "Unemployed Youth", "Farmer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Collateral-free business loans up to ₹20 Lakh across Shishu (up to ₹50k), Kishore (₹50k-₹5L), and Tarun (₹5L-₹20L) categories.",
+    "benefitsPa": "ਨਵਾਂ ਕੰਮ ਜਾਂ ਦੁਕਾਨ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਬਿਨਾਂ ਕਿਸੇ ਜ਼ਮੀਨ ਦੀ ਗਾਰੰਟੀ ਦੇ ₹20 ਲੱਖ ਤੱਕ ਦਾ ਸਸਤਾ ਵਪਾਰਕ ਕਰਜ਼ਾ।",
+    "benefitsHi": "व्यवसाय शुरू करने या विस्तार हेतु बिना किसी बंधक (Collateral) के ₹20 लाख तक का सस्ता व्यावसायिक ऋण।",
+    "documents": [
+      "Aadhaar Card & PAN Card",
+      "Proof of Business Address / Udyam Registration",
+      "Last 6 Months Bank Statement",
+      "Business Project Proposal / Quotation"
+    ],
+    "officialLink": "https://www.mudra.org.in",
+    "sourceDoc": "PMMY Lending Framework, Dept of Financial Services (mudra.org.in)"
+  },
+  {
+    "id": "pm-svanidhi",
+    "name": "PM Street Vendor’s AtmaNirbhar Nidhi (PM SVANidhi)",
+    "namePa": "ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਸਵਨਿਧੀ ਯੋਜਨਾ (ਰੇਹੜੀ-ਫੜ੍ਹੀ ਵਾਲਿਆਂ ਲਈ)",
+    "nameHi": "प्रधानमंत्री स्ट्रीट वेंडर्स आत्मनिर्भर निधि (पीएम स्वनिधि)",
+    "level": "Central Government",
+    "ministry": "Ministry of Housing and Urban Affairs, Govt of India",
+    "ministryPa": "ਹਾਊਸਿੰਗ ਅਤੇ ਸ਼ਹਿਰੀ ਮਾਮਲਿਆਂ ਦਾ ਮੰਤਰਾਲਾ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "आवासन और शहरी कार्य मंत्रालय, भारत सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 70,
+      "maxIncome": null,
+      "occupations": ["Daily Wage Worker", "Self-Employed/Shopkeeper"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Collateral-free working capital loan of ₹10,000 (1st tranche), ₹20,000 (2nd tranche), and ₹50,000 (3rd tranche) with 7% interest subsidy & cashback on digital transactions.",
+    "benefitsPa": "ਸ਼ਹਿਰੀ ਰੇਹੜੀ-ਫੜ੍ਹੀ ਵਾਲਿਆਂ ਲਈ ₹10,000 ਤੋਂ ₹50,000 ਤੱਕ ਬਿਨਾਂ ਗਾਰੰਟੀ ਕਰਜ਼ਾ ਅਤੇ ਸਮੇਂ ਸਿਰ ਮੋੜਨ 'ਤੇ 7% ਵਿਆਜ ਸਬਸਿਡੀ।",
+    "benefitsHi": "स्ट्रीट वेंडरों को ₹10,000 से ₹50,000 तक कार्यशील पूंजी ऋण, 7% ब्याज सब्सिडी व डिजिटल कैशबैक।",
+    "documents": [
+      "Aadhaar Card",
+      "Vending Certificate / Identity Card issued by Urban Local Body (Municipal Corporation)",
+      "Bank Account details"
+    ],
+    "officialLink": "https://pmsvanidhi.mohua.gov.in",
+    "sourceDoc": "Scheme Guidelines for PM SVANidhi, MoHUA (pmsvanidhi.mohua.gov.in)"
+  },
+  {
+    "id": "sukanya-samriddhi",
+    "name": "Sukanya Samriddhi Yojana (Beti Bachao Beti Padhao)",
+    "namePa": "ਸੁਕੰਨਿਆ ਸਮ੍ਰਿਧੀ ਯੋਜਨਾ (ਬੇਟੀ ਬਚਾਓ ਬੇਟੀ ਪੜ੍ਹਾਓ)",
+    "nameHi": "सुकन्या समृद्धि योजना (बेटी बचाओ बेटी पढ़ाओ)",
+    "level": "Central Government",
+    "ministry": "Ministry of Finance / Dept of Posts, Govt of India",
+    "ministryPa": "ਵਿੱਤ ਮੰਤਰਾਲਾ / ਡਾਕ ਵਿਭਾਗ, ਭਾਰਤ ਸਰਕਾਰ",
+    "ministryHi": "वित्त मंत्रालय / डाक विभाग, भारत सरकार",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 10,
+      "maxIncome": null,
+      "occupations": ["Student", "Homemaker"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "Female"
+    },
+    "benefits": "High sovereign guaranteed interest rate (8.2% p.a.), complete tax exemption under 80C (EEE status), matured funds for higher education & marriage.",
+    "benefitsPa": "ਧੀਆਂ ਦੇ ਭਵਿੱਖ ਲਈ ਸਰਕਾਰੀ ਗਾਰੰਟੀਸ਼ੁਦਾ ਉੱਚ ਵਿਆਜ (8.2%), ਪੂਰੀ ਟੈਕਸ ਛੋਟ, ਉੱਚ ਸਿੱਖਿਆ ਅਤੇ ਵਿਆਹ ਲਈ ਵੱਡੀ ਰਕਮ।",
+    "benefitsHi": "बेटियों के भविष्य हेतु 8.2% उच्चतम सुरक्षित ब्याज दर, धारा 80सी के तहत पूर्ण कर छूट तथा परिपक्वता पर बड़ी धनराशि।",
+    "documents": [
+      "Birth Certificate of the Girl Child",
+      "Aadhaar Card of Parent / Legal Guardian",
+      "Address Proof & Passport size photographs"
+    ],
+    "officialLink": "https://www.indiapost.gov.in",
+    "sourceDoc": "Govt of India Sukanya Samriddhi Account Rules, Ministry of Finance"
+  },
+  {
+    "id": "punjab-ashirwad",
+    "name": "Punjab Ashirwad (Shagun) Scheme",
+    "namePa": "ਪੰਜਾਬ ਅਸ਼ੀਰਵਾਦ ਸਕੀਮ (ਸ਼ਗਨ ਸਕੀਮ)",
+    "nameHi": "पंजाब आशीर्वाद (शगुन) योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Social Justice, Empowerment and Minorities, Govt of Punjab",
+    "ministryPa": "ਸਮਾਜਿਕ ਨਿਆਂ, ਅਧਿਕਾਰਤਾ ਅਤੇ ਘੱਟ ਗਿਣਤੀ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "सामाजिक न्याय, अधिकारिता एवं अल्पसंख्यक विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 50,
+      "maxIncome": 32790,
+      "occupations": ["Farmer", "Agricultural Labourer", "Daily Wage Worker", "Homemaker", "Unemployed Youth"],
+      "categories": ["SC", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "Female"
+    },
+    "benefits": "One-time direct financial grant of ₹51,000 for the marriage of daughters belonging to low-income SC, BC, and economically weaker families.",
+    "benefitsPa": "ਘੱਟ ਆਮਦਨ ਵਾਲੇ ਅਨੁਸੂਚਿਤ ਜਾਤੀਆਂ ਅਤੇ ਪੱਛੜੀਆਂ ਸ਼੍ਰੇਣੀਆਂ ਦੀਆਂ ਧੀਆਂ ਦੇ ਵਿਆਹ ਸਮੇਂ ₹51,000 ਦੀ ਸਿੱਧੀ ਸ਼ਗਨ ਰਾਸ਼ੀ।",
+    "benefitsHi": "गरीब अनुसूचित जाति, पिछड़े वर्ग एवं आर्थिक रूप से कमजोर परिवारों की बेटियों के विवाह हेतु ₹51,000 की नकद सहायता।",
+    "documents": [
+      "Punjab Domicile / Residence Certificate",
+      "Caste Certificate (SC/BC) or EWS Certificate",
+      "Income Certificate (Annual Family Income ≤ ₹32,790)",
+      "Age Proof of Bride (≥ 18 years) & Groom (≥ 21 years)",
+      "Bank Account seeded with Aadhaar"
+    ],
+    "officialLink": "https://esewa.punjab.gov.in",
+    "sourceDoc": "Punjab Social Justice Dept Notification on Ashirwad Scheme Revision (esewa.punjab.gov.in)"
+  },
+  {
+    "id": "punjab-old-age-pension",
+    "name": "Punjab Old Age Pension Scheme",
+    "namePa": "ਪੰਜਾਬ ਬੁਢਾਪਾ ਪੈਨਸ਼ਨ ਸਕੀਮ",
+    "nameHi": "पंजाब वृद्धावस्था पेंशन योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Social Security and Women & Child Development, Govt of Punjab",
+    "ministryPa": "ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ ਅਤੇ ਇਸਤਰੀ ਤੇ ਬਾਲ ਵਿਕਾਸ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "सामाजिक सुरक्षा एवं महिला व बाल विकास विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 65,
+      "maxAge": 110,
+      "maxIncome": 60000,
+      "occupations": ["Senior Citizen"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Monthly pension of ₹1,500 disbursed directly into bank account via Direct Benefit Transfer (DBT). (Age criterion: 65+ for men, 58+ for women).",
+    "benefitsPa": "ਬਜ਼ੁਰਗਾਂ ਨੂੰ ਹਰ ਮਹੀਨੇ ₹1,500 ਦੀ ਵਿੱਤੀ ਪੈਨਸ਼ਨ ਸਿੱਧੀ ਬੈਂਕ ਖਾਤੇ ਵਿੱਚ ਦਿੱਤੀ ਜਾਂਦੀ ਹੈ (ਪੁਰਸ਼ 65+ ਸਾਲ, ਔਰਤਾਂ 58+ ਸਾਲ)।",
+    "benefitsHi": "बुजुर्गों को प्रति माह ₹1,500 की पेंशन सीधे बैंक खाते में (पुरुषों हेतु 65+ वर्ष, महिलाओं हेतु 58+ वर्ष)।",
+    "documents": [
+      "Aadhaar Card & Voter ID (Proof of Age)",
+      "Punjab Residence Certificate",
+      "Income Certificate / Affidavit of family income ≤ ₹60,000/yr",
+      "Landholding record (max 2.5 acres nehri or 5 acres barani)",
+      "Bank Passbook"
+    ],
+    "officialLink": "https://sswcd.punjab.gov.in",
+    "sourceDoc": "Punjab Financial Assistance to Old Age Persons Rules, Dept of Social Security Punjab"
+  },
+  {
+    "id": "punjab-widow-pension",
+    "name": "Punjab Financial Assistance to Widows and Destitute Women",
+    "namePa": "ਵਿਧਵਾ ਅਤੇ ਬੇਸਹਾਰਾ ਔਰਤਾਂ ਲਈ ਵਿੱਤੀ ਸਹਾਇਤਾ ਸਕੀਮ",
+    "nameHi": "विधवा एवं निराश्रित महिलाओं हेतु वित्तीय सहायता योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Social Security, Women & Child Development, Punjab",
+    "ministryPa": "ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ, ਇਸਤਰੀ ਤੇ ਬਾਲ ਵਿਕਾਸ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "सामाजिक सुरक्षा, महिला एवं बाल विकास विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 65,
+      "maxIncome": 60000,
+      "occupations": ["Homemaker", "Daily Wage Worker", "Agricultural Labourer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "Female"
+    },
+    "benefits": "Monthly financial assistance of ₹1,500 directly transferred to eligible widows and destitute single women.",
+    "benefitsPa": "ਵਿਧਵਾ, ਤਲਾਕਸ਼ੁਦਾ ਅਤੇ ਬੇਸਹਾਰਾ ਔਰਤਾਂ ਨੂੰ ਆਤਮ-ਨਿਰਭਰਤਾ ਲਈ ਹਰ ਮਹੀਨੇ ₹1,500 ਦੀ ਪੈਨਸ਼ਨ।",
+    "benefitsHi": "विधवा एवं निराश्रित महिलाओं को भरण-पोषण हेतु प्रति माह ₹1,500 की पेंशन सहायता।",
+    "documents": [
+      "Aadhaar Card",
+      "Husband Death Certificate (for widows) or Destitution Certificate",
+      "Punjab Residence Certificate",
+      "Income Affidavit (≤ ₹60,000/yr)",
+      "Aadhaar Seeded Bank Account"
+    ],
+    "officialLink": "https://sswcd.punjab.gov.in",
+    "sourceDoc": "Punjab Social Security Department Welfare Manual for Widows (sswcd.punjab.gov.in)"
+  },
+  {
+    "id": "punjab-disability-pension",
+    "name": "Punjab Disability Pension Scheme (Divyangjan Sahayata)",
+    "namePa": "ਪੰਜਾਬ ਦਿਵਿਆਂਗਜਨ (ਅਪਾਹਜਤਾ) ਪੈਨਸ਼ਨ ਸਕੀਮ",
+    "nameHi": "पंजाब दिव्यांगजन पेंशन योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Social Security and Women & Child Development, Punjab",
+    "ministryPa": "ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "सामाजिक सुरक्षा विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 100,
+      "maxIncome": 60000,
+      "occupations": ["All"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Monthly pension of ₹1,500 for persons with benchmark disability (40% or more) to support livelihood and medical needs.",
+    "benefitsPa": "40% ਜਾਂ ਇਸ ਤੋਂ ਵੱਧ ਦਿਵਿਆਂਗਤਾ (ਅੰਗਹੀਣਤਾ) ਵਾਲੇ ਵਿਅਕਤੀਆਂ ਨੂੰ ਪ੍ਰਤੀ ਮਹੀਨਾ ₹1,500 ਦੀ ਸਹਾਇਤਾ ਰਾਸ਼ੀ।",
+    "benefitsHi": "40% या अधिक दिव्यांगता वाले व्यक्तियों को प्रति माह ₹1,500 की पेंशन।",
+    "documents": [
+      "Aadhaar Card",
+      "Unique Disability ID (UDID) Card or Civil Surgeon Disability Certificate (≥ 40%)",
+      "Punjab Residence Certificate",
+      "Bank Account details"
+    ],
+    "officialLink": "https://sswcd.punjab.gov.in",
+    "sourceDoc": "Rules for Financial Assistance to Disabled Persons, Punjab Govt (sswcd.punjab.gov.in)"
+  },
+  {
+    "id": "sarbat-sehat-bima",
+    "name": "Ayushman Bharat - Mukh Mantri Sehat Bima Yojana (Punjab)",
+    "namePa": "ਮੁੱਖ ਮੰਤਰੀ ਸਰਬੱਤ ਸਿਹਤ ਬੀਮਾ ਯੋਜਨਾ ਪੰਜਾਬ",
+    "nameHi": "मुख्यमंत्री सरबत सेहत बीमा योजना पंजाब",
+    "level": "Punjab State",
+    "ministry": "State Health Agency, Department of Health & Family Welfare, Punjab",
+    "ministryPa": "ਸਟੇਟ ਹੈਲਥ ਏਜੰਸੀ, ਸਿਹਤ ਅਤੇ ਪਰਿਵਾਰ ਭਲਾਈ ਵਿਭਾਗ, ਪੰਜਾਬ",
+    "ministryHi": "राज्य स्वास्थ्य एजेंसी, स्वास्थ्य एवं परिवार कल्याण विभाग, पंजाब",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["Farmer", "Agricultural Labourer", "Daily Wage Worker", "Artisan/Craftsperson", "Homemaker", "Senior Citizen"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Cashless secondary and tertiary healthcare treatment up to ₹5 Lakh per family per year in 900+ empaneled government and private hospitals in Punjab.",
+    "benefitsPa": "ਪੰਜਾਬ ਦੇ 900+ ਸਰਕਾਰੀ ਅਤੇ ਨਿੱਜੀ ਹਸਪਤਾਲਾਂ ਵਿੱਚ ਪ੍ਰਤੀ ਪਰਿਵਾਰ ਸਾਲਾਨਾ ₹5 ਲੱਖ ਤੱਕ ਦਾ ਮੁਫ਼ਤ ਇਲਾਜ। ਜੇ-ਫਾਰਮ ਧਾਰਕ ਕਿਸਾਨ, ਨੀਲਾ ਕਾਰਡ ਧਾਰਕ, ਉਸਾਰੀ ਕਾਮੇ ਸਭ ਸ਼ਾਮਲ।",
+    "benefitsHi": "पंजाब के 900+ अस्पतालों में प्रति परिवार ₹5 लाख का कैशलेस स्वास्थ्य बीमा। जे-फॉर्म धारक किसान, राशन कार्ड धारक सभी शामिल।",
+    "documents": [
+      "Aadhaar Card",
+      "NFSA Smart Ration Card or J-Form (Mandi Board) or Construction Worker Registration Card",
+      "Golden Sehat Card"
+    ],
+    "officialLink": "https://sha.punjab.gov.in",
+    "sourceDoc": "Mukh Mantri Sehat Bima Yojana Operational Framework, State Health Agency Punjab (sha.punjab.gov.in)"
+  },
+  {
+    "id": "punjab-free-electricity",
+    "name": "Punjab 300 Units Free Electricity Scheme",
+    "namePa": "ਪੰਜਾਬ 300 ਯੂਨਿਟ ਮੁਫ਼ਤ ਬਿਜਲੀ ਸਕੀਮ",
+    "nameHi": "पंजाब 300 यूनिट मुफ्त बिजली योजना",
+    "level": "Punjab State",
+    "ministry": "Punjab State Power Corporation Limited (PSPCL), Govt of Punjab",
+    "ministryPa": "ਪੰਜਾਬ ਸਟੇਟ ਪਾਵਰ ਕਾਰਪੋਰੇਸ਼ਨ ਲਿਮਟਿਡ (ਪੀ.ਐਸ.ਪੀ.ਸੀ.ਐਲ), ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "पंजाब स्टेट पावर कॉर्पोरेशन लिमिटेड (पीएसपीसीएल), पंजाब सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["All"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Zero electricity bill for domestic consumers consuming up to 300 units per month (600 units per bi-monthly billing cycle).",
+    "benefitsPa": "ਘਰੇਲੂ ਬਿਜਲੀ ਖਪਤਕਾਰਾਂ ਲਈ 300 ਯੂਨਿਟ ਪ੍ਰਤੀ ਮਹੀਨਾ (ਦੋ ਮਹੀਨਿਆਂ ਵਿੱਚ 600 ਯੂਨਿਟ) ਬਿਲਕੁਲ ਮੁਫ਼ਤ, ਜ਼ੀਰੋ ਬਿਜਲੀ ਬਿੱਲ।",
+    "benefitsHi": "घरेलू उपभोक्ताओं को प्रति माह 300 यूनिट (द्विमासिक 600 यूनिट) मुफ्त बिजली, शून्य बिजली बिल।",
+    "documents": [
+      "PSPCL Domestic Electricity Account Number (Contract Account / CA)",
+      "Aadhaar Card linked to electricity meter address",
+      "Punjab Domicile"
+    ],
+    "officialLink": "https://pspcl.in",
+    "sourceDoc": "Govt of Punjab Tariff Order Notification for 300 Free Units Domestic Power (pspcl.in)"
+  },
+  {
+    "id": "punjab-shehri-awas",
+    "name": "Punjab Shehri Awas Yojana (Urban Housing)",
+    "namePa": "ਪੰਜਾਬ ਸ਼ਹਿਰੀ ਆਵਾਸ ਯੋਜਨਾ",
+    "nameHi": "पंजाब शहरी आवास योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Housing and Urban Development, Punjab",
+    "ministryPa": "ਮਕਾਨ ਉਸਾਰੀ ਅਤੇ ਸ਼ਹਿਰੀ ਵਿਕਾਸ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "आवास एवं शहरी विकास विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 70,
+      "maxIncome": 300000,
+      "occupations": ["Daily Wage Worker", "Self-Employed/Shopkeeper", "Agricultural Labourer", "Unemployed Youth"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Free housing/flat or subsidy of ₹1.5 Lakh for construction/enhancement of pucca houses for urban homeless and EWS citizens.",
+    "benefitsPa": "ਸ਼ਹਿਰਾਂ ਵਿੱਚ ਰਹਿਣ ਵਾਲੇ ਬੇਘਰ ਗਰੀਬ ਪਰਿਵਾਰਾਂ ਲਈ ਮੁਫ਼ਤ ਫਲੈਟ ਜਾਂ ਮਕਾਨ ਬਣਾਉਣ ਲਈ ₹1.50 ਲੱਖ ਦੀ ਵਿੱਤੀ ਗ੍ਰਾਂਟ।",
+    "benefitsHi": "शहरी क्षेत्रों के बेघर निर्धन परिवारों को पक्का मकान निर्माण हेतु ₹1.50 लाख का अनुदान अथवा रियायती आवास।",
+    "documents": [
+      "Aadhaar Card",
+      "Punjab Residence Certificate in Municipal limits for at least 3 years",
+      "Income Certificate (EWS income ≤ ₹3 Lakh/yr)",
+      "Proof of no existing pucca house in India"
+    ],
+    "officialLink": "https://envisaged.punjab.gov.in",
+    "sourceDoc": "Punjab Shehri Awas Policy Guidelines, Dept of Housing & Urban Development"
+  },
+  {
+    "id": "mai-bhago-vidya",
+    "name": "Mai Bhago Istri Vidya Scheme (Free Cycles for Girls)",
+    "namePa": "ਮਾਈ ਭਾਗੋ ਇਸਤਰੀ ਵਿੱਦਿਆ ਸਕੀਮ (ਸਕੂਲੀ ਵਿਦਿਆਰਥਣਾਂ ਲਈ ਮੁਫ਼ਤ ਸਾਈਕਲ)",
+    "nameHi": "माई भागो स्त्री विद्या योजना (छात्राओं हेतु निःशुल्क साइकिल)",
+    "level": "Punjab State",
+    "ministry": "Department of School Education, Govt of Punjab",
+    "ministryPa": "ਸਕੂਲ ਸਿੱਖਿਆ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "स्कूल शिक्षा विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 13,
+      "maxAge": 18,
+      "maxIncome": null,
+      "occupations": ["Student"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "Female"
+    },
+    "benefits": "Free high-quality standard bicycle provided to girl students studying in Class 9th to 12th in Punjab Government Schools to facilitate distance travel and prevent school dropouts.",
+    "benefitsPa": "ਸਰਕਾਰੀ ਸਕੂਲਾਂ ਵਿੱਚ 9ਵੀਂ ਤੋਂ 12ਵੀਂ ਜਮਾਤ ਦੀਆਂ ਸਾਰੀਆਂ ਵਿਦਿਆਰਥਣਾਂ ਨੂੰ ਸਕੂਲ ਆਉਣ-ਜਾਣ ਲਈ ਬਿਲਕੁਲ ਮੁਫ਼ਤ ਸਾਈਕਲ।",
+    "benefitsHi": "पंजाब के सरकारी स्कूलों में कक्षा 9 से 12 की सभी छात्राओं को दूरी तय करने हेतु निःशुल्क साइकिल।",
+    "documents": [
+      "Aadhaar Card of Student",
+      "Punjab Govt School Enrollment Certificate / e-Punjab School ID",
+      "Bonafide Resident of Punjab Certificate"
+    ],
+    "officialLink": "https://epunjabschool.gov.in",
+    "sourceDoc": "Punjab School Education Dept Guidelines on Mai Bhago Free Bicycle Scheme"
+  },
+  {
+    "id": "bhai-ghanhya-sehat",
+    "name": "Bhai Ghanhya Sehat Sewa Scheme",
+    "namePa": "ਭਾਈ ਘਨ੍ਹੱਈਆ ਸਿਹਤ ਸੇਵਾ ਸਕੀਮ",
+    "nameHi": "भाई कन्हैया सेहत सेवा योजना",
+    "level": "Punjab State",
+    "ministry": "Department of Cooperation, Govt of Punjab",
+    "ministryPa": "ਸਹਿਕਾਰਤਾ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "सहकारिता विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 0,
+      "maxAge": 85,
+      "maxIncome": null,
+      "occupations": ["Farmer", "Agricultural Labourer", "Self-Employed/Shopkeeper"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "Cashless hospitalization coverage up to ₹2 Lakh on family floater basis for members and employees of Cooperative Societies in Punjab.",
+    "benefitsPa": "ਪੰਜਾਬ ਦੀਆਂ ਸਹਿਕਾਰੀ ਸਭਾਵਾਂ (ਕੋ-ਆਪਰੇਟਿਵ ਸੁਸਾਇਟੀਆਂ) ਦੇ ਮੈਂਬਰਾਂ ਅਤੇ ਉਹਨਾਂ ਦੇ ਪਰਿਵਾਰਾਂ ਲਈ ₹2 ਲੱਖ ਤੱਕ ਦਾ ਕੈਸ਼ਲੈੱਸ ਸਿਹਤ ਬੀਮਾ।",
+    "benefitsHi": "पंजाब की सहकारी समितियों के सदस्यों एवं परिवारों हेतु ₹2 लाख तक का कैशलेस स्वास्थ्य उपचार।",
+    "documents": [
+      "Cooperative Society Membership Passbook / Certificate",
+      "Aadhaar Card of Family Head and dependents",
+      "Punjab Residence Certificate"
+    ],
+    "officialLink": "https://cooperative.punjab.gov.in",
+    "sourceDoc": "Punjab Cooperative Department Guidelines on Bhai Ghanhya Sehat Sewa Scheme"
+  },
+  {
+    "id": "crop-residue-subsidy",
+    "name": "Punjab Crop Residue Management (CRM) Agricultural Machinery Subsidy",
+    "namePa": "ਫ਼ਸਲੀ ਰਹਿੰਦ-ਖੂੰਹਦ ਪ੍ਰਬੰਧਨ ਖੇਤੀ ਮਸ਼ੀਨਰੀ ਸਬਸਿਡੀ ਸਕੀਮ (ਪਰਾਲੀ ਪ੍ਰਬੰਧਨ)",
+    "nameHi": "पंजाब फसल अवशेष प्रबंधन कृषि यंत्र सब्सिडी योजना (पराली प्रबंधन)",
+    "level": "Punjab State",
+    "ministry": "Department of Agriculture and Farmers Welfare, Govt of Punjab",
+    "ministryPa": "ਖੇਤੀਬਾੜੀ ਅਤੇ ਕਿਸਾਨ ਭਲਾਈ ਵਿਭਾਗ, ਪੰਜਾਬ ਸਰਕਾਰ",
+    "ministryHi": "कृषि एवं किसान कल्याण विभाग, पंजाब सरकार",
+    "eligibility": {
+      "minAge": 18,
+      "maxAge": 100,
+      "maxIncome": null,
+      "occupations": ["Farmer"],
+      "categories": ["General", "SC", "ST", "OBC/BC", "EWS"],
+      "districts": ["All"],
+      "gender": "All"
+    },
+    "benefits": "50% capital subsidy for individual farmers and 80% subsidy for Custom Hiring Centres (CHCs) / Panchayats / Farmer Groups on Super SMS, Happy Seeder, Smart Seeder, Paddy Straw Chopper, and Baler machines to stop stubble burning.",
+    "benefitsPa": "ਪਰਾਲੀ ਪ੍ਰਬੰਧਨ ਲਈ ਸੁਪਰ ਸੀਡਰ, ਹੈਪੀ ਸੀਡਰ, ਬੇਲਰ ਮਸ਼ੀਨਾਂ 'ਤੇ ਕਿਸਾਨਾਂ ਨੂੰ 50% ਅਤੇ ਪੰਚਾਇਤਾਂ/ਸਮੂਹਾਂ ਨੂੰ 80% ਸਬਸਿਡੀ।",
+    "benefitsHi": "पराली प्रबंधन हेतु सुपर सीडर, हैप्पी सीडर एवं बेलर पर व्यक्तिगत किसानों को 50% व किसान समूहों/पंचायतों को 80% सब्सिडी।",
+    "documents": [
+      "Aadhaar Card",
+      "Farad / Jamabandi of Agricultural Land in Punjab",
+      "Tractor Registration Certificate (RC) in farmer's name",
+      "Bank Account details & Undertaking not to burn crop residue"
+    ],
+    "officialLink": "https://agrimachinerypb.com",
+    "sourceDoc": "Punjab Agriculture Dept Guidelines for Promotion of Agricultural Mechanization for In-Situ Management of Crop Residue (agrimachinerypb.com)"
+  }
+]
