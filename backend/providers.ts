@@ -1,3 +1,5 @@
+import { env } from 'node:process';
+
 export interface OfficialSearchSource {
   title: string;
   url: string;
@@ -24,7 +26,7 @@ const isConfigured = (value: string | undefined, placeholder: string) =>
   Boolean(value && value !== placeholder);
 
 export async function searchOfficialSources(query: string): Promise<OfficialSearchSource[]> {
-  const apiKey = process.env.TAVILY_API_KEY;
+  const apiKey = env.TAVILY_API_KEY;
   if (!isConfigured(apiKey, 'your-tavily-api-key')) return [];
 
   const response = await fetch('https://api.tavily.com/search', {
@@ -69,7 +71,7 @@ export async function searchOfficialSources(query: string): Promise<OfficialSear
 }
 
 export async function generateGroqText(systemPrompt: string, prompt: string): Promise<string | null> {
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = env.GROQ_API_KEY;
   if (!isConfigured(apiKey, 'your-groq-api-key')) return null;
 
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -79,7 +81,7 @@ export async function generateGroqText(systemPrompt: string, prompt: string): Pr
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+      model: env.GROQ_MODEL || 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: prompt }
