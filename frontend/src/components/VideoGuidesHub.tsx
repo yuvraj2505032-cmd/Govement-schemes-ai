@@ -184,15 +184,6 @@ export const VideoGuidesHub: React.FC<VideoGuidesHubProps> = ({
                       <Play className="w-3.5 h-3.5 fill-white" />
                       <span>Start Video Tutorial</span>
                     </button>
-                    <a
-                      href={`https://www.youtube.com/watch?v=${selectedScheme.youtubeVideoId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-3 py-2 rounded-xl border border-white/20 transition-all flex items-center gap-1.5"
-                    >
-                      <span>Watch on YouTube</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
                   </div>
                 </div>
               )}

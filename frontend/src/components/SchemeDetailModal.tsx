@@ -584,17 +584,8 @@ export const SchemeDetailModal: React.FC<SchemeDetailModalProps> = ({
                 />
               </div>
 
-              <div className="text-xs text-slate-500 font-medium flex items-center justify-between">
-                <span>Video: {scheme.youtubeVideoTitle}</span>
-                <a
-                  href={`https://www.youtube.com/watch?v=${scheme.youtubeVideoId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-rose-600 hover:underline flex items-center gap-1 font-bold"
-                >
-                  <span>Watch on YouTube</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+              <div className="text-xs text-slate-500 font-medium">
+                Video: {scheme.youtubeVideoTitle}
               </div>
             </div>
           )}

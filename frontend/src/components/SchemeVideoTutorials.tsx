@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Search, Youtube } from 'lucide-react';
+import { Play, Youtube } from 'lucide-react';
 import { FALLBACK_SCHEME_VIDEO_IDS, SCHEME_VIDEO_IDS } from '../data/schemeVideos';
 
 interface SchemeVideoTutorialsProps {
@@ -14,7 +14,6 @@ export const SchemeVideoTutorials: React.FC<SchemeVideoTutorialsProps> = ({
   schemeId,
 }) => {
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
-  const query = `${schemeName} scheme apply online tutorial Hindi`;
   const curatedVideoIds = schemeId ? SCHEME_VIDEO_IDS[schemeId] : undefined;
   const videoIds = (curatedVideoIds?.length ? curatedVideoIds : FALLBACK_SCHEME_VIDEO_IDS)
     .filter((videoId) => YOUTUBE_VIDEO_ID_PATTERN.test(videoId))
@@ -31,15 +30,6 @@ export const SchemeVideoTutorials: React.FC<SchemeVideoTutorialsProps> = ({
             Watch step-by-step application guidance in Hindi.
           </p>
         </div>
-        <a
-          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
-        >
-          <Search className="h-3.5 w-3.5" />
-          Search YouTube
-        </a>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
