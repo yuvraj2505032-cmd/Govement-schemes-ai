@@ -91,7 +91,7 @@ export function matchesSchemeSearch(scheme: Scheme, query: string): boolean {
       .flatMap(aliases => aliases.flatMap(tokenize));
     if (aliasTerms.some(alias => searchableTerms.some(candidate => candidate.startsWith(alias)))) return true;
 
-    return term.length >= 5 &&
-      searchableTerms.some(candidate => candidate.length >= 5 && editDistanceAtMostOne(term, candidate));
+    return term.length >= 4 &&
+      searchableTerms.some(candidate => candidate.length >= 4 && editDistanceAtMostOne(term, candidate));
   });
 }
