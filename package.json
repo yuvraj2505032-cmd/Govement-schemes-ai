@@ -9,7 +9,7 @@
     "start": "tsx backend/server.ts",
     "preview": "vite preview frontend --config frontend/vite.config.ts",
     "clean": "node -e \"require('node:fs').rmSync('frontend/dist',{recursive:true,force:true})\"",
-    "test": "tsx --test frontend/src/utils/schemeEngine.test.ts frontend/src/utils/schemeSearch.test.ts frontend/src/lib/citizenCloudSync.test.ts backend/providers.test.ts backend/chatUtils.test.ts",
+    "test": "tsx --test frontend/src/utils/schemeEngine.test.ts frontend/src/utils/schemeSearch.test.ts frontend/src/lib/citizenCloudSync.test.ts frontend/src/lib/localAuth.test.ts backend/providers.test.ts backend/chatUtils.test.ts",
     "lint": "tsc --noEmit -p frontend/tsconfig.json"
   },
   "dependencies": {

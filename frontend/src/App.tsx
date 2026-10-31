@@ -37,6 +37,8 @@ import { AiProfileRoadmapModal } from './components/AiProfileRoadmapModal';
 import { AdminConsole } from './components/AdminConsole';
 import { supabase, supabaseConfigurationError } from './lib/supabase';
 import { loadCitizenCloudData, parseCitizenProfile, parseSavedSchemeIds, parseTrackedItems, saveCitizenCloudData } from './lib/citizenCloudSync';
+import { createLocalAccount, restoreLocalAccount, signInLocalAccount, signOutLocalAccount } from './lib/localAuth';
+import type { LocalAccount } from './lib/localAuth';
 
 import { 
   ShieldCheck,
@@ -93,9 +95,13 @@ export default function App() {
   const [managedSites, setManagedSites] = useState<ManagedOfficialSite[]>([]);
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [localAccount, setLocalAccount] = useState<LocalAccount | null>(null);
+  const [localAuthReady, setLocalAuthReady] = useState(false);
+  const [localAuthError, setLocalAuthError] = useState<string | null>(null);
   const [dataOwnerId, setDataOwnerId] = useState<string | null | undefined>(undefined);
   const [cloudSyncStatus, setCloudSyncStatus] = useState('Cloud sync is not active.');
   const importLocalDataOnSignIn = useRef(false);
+  const importLocalDataOnLocalSignUp = useRef(false);
   const hadActiveCloudAccount = useRef(false);
   const [selectedScheme, setSelectedScheme] = useState<Scheme | null>(null);
   const [isVoiceAssistantOpen, setIsVoiceAssistantOpen] = useState(false);
@@ -199,6 +205,17 @@ export default function App() {
   });
 
   useEffect(() => {
+    try {
+      setLocalAccount(restoreLocalAccount());
+    } catch (error) {
+      console.error('Could not restore local account:', error);
+      setLocalAuthError(error instanceof Error ? error.message : 'Could not restore the local account.');
+    } finally {
+      setLocalAuthReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!supabase) {
       setAuthReady(true);
       return;
@@ -233,7 +250,38 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!authReady) return;
+    if (!authReady || !localAuthReady) return;
+
+    if (!authUser && localAccount) {
+      const ownerId = `local-${localAccount.id}`;
+      hadActiveCloudAccount.current = false;
+      try {
+        const savedSchemes = localStorage.getItem(`punjab_saved_schemes:${ownerId}`);
+        const trackedSchemes = localStorage.getItem(`punjab_tracked_schemes:${ownerId}`);
+        const savedProfile = loadStoredProfile(`janshayak_profile:${ownerId}`);
+        const importGuestData = importLocalDataOnLocalSignUp.current;
+        const guestSavedSchemes = importGuestData ? localStorage.getItem('punjab_saved_schemes') : null;
+        const guestTrackedSchemes = importGuestData ? localStorage.getItem('punjab_tracked_schemes') : null;
+        setSavedSchemeIds(savedSchemes
+          ? parseSavedSchemeIds(JSON.parse(savedSchemes))
+          : guestSavedSchemes
+            ? parseSavedSchemeIds(JSON.parse(guestSavedSchemes))
+            : new Set());
+        setTrackedItems(trackedSchemes
+          ? parseTrackedItems(JSON.parse(trackedSchemes))
+          : guestTrackedSchemes
+            ? parseTrackedItems(JSON.parse(guestTrackedSchemes)).filter(item => !item.id.startsWith('track-default-'))
+            : []);
+        setProfile(savedProfile ?? (importGuestData ? loadStoredProfile('janshayak_profile') : null) ?? DEFAULT_PROFILE);
+        importLocalDataOnLocalSignUp.current = false;
+        setDataOwnerId(ownerId);
+        setCloudSyncStatus('This account is saved on this device only. It does not sync to the cloud.');
+      } catch (error) {
+        console.error('Could not load local account data:', error);
+        setCloudSyncStatus(error instanceof Error ? error.message : 'Could not load local account data.');
+      }
+      return;
+    }
 
     if (!authUser) {
       if (hadActiveCloudAccount.current) {
@@ -302,12 +350,12 @@ export default function App() {
     return () => {
       active = false;
     };
-  }, [authReady, authUser?.id]);
+  }, [authReady, localAuthReady, authUser?.id, localAccount?.id]);
 
   // Keep the signed-in account's cache separate from guest data on shared devices.
   useEffect(() => {
-    const ownerId = authUser?.id ?? null;
-    if (!authReady || dataOwnerId !== ownerId) return;
+    const ownerId = authUser?.id ?? (localAccount ? `local-${localAccount.id}` : null);
+    if (!authReady || !localAuthReady || dataOwnerId !== ownerId) return;
 
     const savedKey = ownerId ? `punjab_saved_schemes:${ownerId}` : 'punjab_saved_schemes';
     const trackedKey = ownerId ? `punjab_tracked_schemes:${ownerId}` : 'punjab_tracked_schemes';
@@ -331,18 +379,18 @@ export default function App() {
     }, 500);
 
     return () => window.clearTimeout(timeout);
-  }, [authReady, dataOwnerId, authUser?.id, savedSchemeIds, trackedItems, profile]);
+  }, [authReady, localAuthReady, dataOwnerId, authUser?.id, localAccount?.id, savedSchemeIds, trackedItems, profile]);
 
   useEffect(() => {
-    const ownerId = authUser?.id ?? null;
-    if (!authReady || dataOwnerId !== ownerId) return;
+    const ownerId = authUser?.id ?? (localAccount ? `local-${localAccount.id}` : null);
+    if (!authReady || !localAuthReady || dataOwnerId !== ownerId) return;
     try {
       localStorage.setItem(ownerId ? `janshayak_profile:${ownerId}` : 'janshayak_profile', JSON.stringify(profile));
     } catch (error) {
       console.error('Could not cache citizen profile on this device:', error);
       setCloudSyncStatus('Could not save your profile on this device.');
     }
-  }, [authReady, dataOwnerId, authUser?.id, profile]);
+  }, [authReady, localAuthReady, dataOwnerId, authUser?.id, localAccount?.id, profile]);
 
   useEffect(() => {
     if (!supabase) {
@@ -378,6 +426,10 @@ export default function App() {
     if (!supabase) return { error: supabaseConfigurationError || 'Supabase is not configured.' };
     importLocalDataOnSignIn.current = importLocalData;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (!error && localAccount) {
+      signOutLocalAccount();
+      setLocalAccount(null);
+    }
     return error ? { error: error.message } : {};
   };
 
@@ -389,17 +441,53 @@ export default function App() {
     if (!data.session) {
       return { notice: 'Check your email to confirm your account, then sign in.' };
     }
+    if (localAccount) {
+      signOutLocalAccount();
+      setLocalAccount(null);
+    }
+    return {};
+  };
+
+  const handleLocalSignIn = async (email: string, password: string) => {
+    const account = await signInLocalAccount(email, password);
+    if (authUser && supabase) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        signOutLocalAccount();
+        return { error: `Could not switch accounts: ${error.message}` };
+      }
+    }
+    setLocalAccount(account);
+    return {};
+  };
+
+  const handleLocalSignUp = async (email: string, password: string, importLocalData: boolean) => {
+    const account = await createLocalAccount(email, password);
+    if (authUser && supabase) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        signOutLocalAccount();
+        return { error: `Could not switch accounts: ${error.message}` };
+      }
+    }
+    importLocalDataOnLocalSignUp.current = importLocalData;
+    setLocalAccount(account);
     return {};
   };
 
   const handleSignOut = async () => {
+    if (localAccount) {
+      signOutLocalAccount();
+      setLocalAccount(null);
+      return null;
+    }
     if (!supabase) return supabaseConfigurationError || 'Supabase is not configured.';
     const { error } = await supabase.auth.signOut();
     return error?.message ?? null;
   };
 
   const handleSaveProfile = async () => {
-    const ownerId = authUser?.id ?? null;
+    const ownerId = authUser?.id ?? (localAccount ? `local-${localAccount.id}` : null);
     if (!authReady || dataOwnerId !== ownerId) {
       throw new Error('Your account data is still loading. Please try again in a moment.');
     }
@@ -612,9 +700,13 @@ export default function App() {
           configured: Boolean(supabase),
           configurationError: supabaseConfigurationError,
           userEmail: authUser?.email ?? null,
+          localUserEmail: localAccount?.email ?? null,
+          localAuthError,
           syncStatus: cloudSyncStatus,
           onSignIn: handleSignIn,
           onSignUp: handleSignUp,
+          onLocalSignIn: handleLocalSignIn,
+          onLocalSignUp: handleLocalSignUp,
           onSignOut: handleSignOut
         }}
       />
