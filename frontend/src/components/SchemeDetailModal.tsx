@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Scheme, EligibilityEvaluation, Language } from '../types/scheme';
 import { TRANSLATIONS } from '../data/translations';
+import { getSchemeVideoIds } from '../data/schemeVideos';
 import { SchemeVideoTutorials } from './SchemeVideoTutorials';
 import { getDocumentMeta, downloadSchemeSummary } from '../utils/documentHelper';
 import { 
@@ -577,8 +578,8 @@ export const SchemeDetailModal: React.FC<SchemeDetailModalProps> = ({
               <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-md bg-slate-900">
                 <iframe
                   className="w-full h-full"
-                  src={`https://www.youtube-nocookie.com/embed/${scheme.youtubeVideoId}?rel=0`}
-                  title={scheme.youtubeVideoTitle}
+                  src={`https://www.youtube-nocookie.com/embed/${getSchemeVideoIds(scheme.id)[0]}?rel=0`}
+                  title={`${title} application video tutorial`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />

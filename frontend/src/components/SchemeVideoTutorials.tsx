@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import { Play, Youtube } from 'lucide-react';
-import { FALLBACK_SCHEME_VIDEO_IDS, SCHEME_VIDEO_IDS } from '../data/schemeVideos';
+import { getSchemeVideoIds } from '../data/schemeVideos';
 
 interface SchemeVideoTutorialsProps {
   schemeName: string;
   schemeId?: string;
 }
 
-const YOUTUBE_VIDEO_ID_PATTERN = /^[\w-]{11}$/;
-
 export const SchemeVideoTutorials: React.FC<SchemeVideoTutorialsProps> = ({
   schemeName,
   schemeId,
 }) => {
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
-  const curatedVideoIds = schemeId ? SCHEME_VIDEO_IDS[schemeId] : undefined;
-  const videoIds = (curatedVideoIds?.length ? curatedVideoIds : FALLBACK_SCHEME_VIDEO_IDS)
-    .filter((videoId) => YOUTUBE_VIDEO_ID_PATTERN.test(videoId))
-    .slice(0, 3);
+  const videoIds = getSchemeVideoIds(schemeId ?? '');
 
   return (
     <section className="space-y-3 border-t border-slate-200 pt-4" aria-labelledby="scheme-video-tutorials-title">

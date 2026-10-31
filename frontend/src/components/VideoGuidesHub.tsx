@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Scheme, Language } from '../types/scheme';
 import { GOV_SCHEMES } from '../data/schemes';
+import { getSchemeVideoIds } from '../data/schemeVideos';
 import { 
   Youtube, 
   Play, 
@@ -140,8 +141,8 @@ export const VideoGuidesHub: React.FC<VideoGuidesHubProps> = ({
             <div className="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden">
               {isPlaying ? (
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${selectedScheme.youtubeVideoId}?autoplay=1&rel=0`}
-                  title={selectedScheme.youtubeVideoTitle}
+                  src={`https://www.youtube-nocookie.com/embed/${getSchemeVideoIds(selectedScheme.id)[0]}?autoplay=1&rel=0`}
+                  title={`${title} application video tutorial`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="w-full h-full border-0"
