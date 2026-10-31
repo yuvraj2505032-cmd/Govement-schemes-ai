@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Scheme, EligibilityEvaluation, Language } from '../types/scheme';
 import { TRANSLATIONS } from '../data/translations';
+import { SchemeVideoTutorials } from './SchemeVideoTutorials';
 import { getDocumentMeta, downloadSchemeSummary } from '../utils/documentHelper';
 import { 
   X, 
@@ -449,6 +450,8 @@ export const SchemeDetailModal: React.FC<SchemeDetailModalProps> = ({
                   <li>Domicile: {scheme.requiresPunjabDomicile ? 'Punjab Resident / Domicile Certificate Required' : 'All Indian Citizens'}</li>
                 </ul>
               </div>
+
+              <SchemeVideoTutorials schemeName={title} schemeId={scheme.id} />
             </div>
           )}
 
